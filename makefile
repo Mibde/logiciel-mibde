@@ -6,7 +6,13 @@ OBJ = $(SRC:.cpp=.o)
 all : $(EXEC)
 
 %.o : %.cpp
-	$(CXX) -o $@ -c $< `wx-config --cxxflags --libs`
+	$(CXX) -o $@ -c $< -lpqxx -lpq `wx-config --cxxflags --libs`
 
 $(EXEC) : $(OBJ)
-	$(CXX) -o $@ $^ `wx-config --cxxflags --libs`
+	$(CXX) -o $@ $^ -lpqxx -lpq `wx-config --cxxflags --libs`
+
+clean :
+	rm -rf *.o
+
+mrproper : clean
+	rm -rf $(EXEC)

@@ -3,6 +3,7 @@
 #define MYFRAME_H_INCLUDED
 
 #include <wx/wx.h>
+#include <wx/scrolwin.h>
 #include <wx/statline.h>
 #include <wx/sizer.h>
 #include <iostream>
@@ -15,7 +16,7 @@
 #include <iostream>
 #include<iomanip>
 #include <fstream>
-#include "Article.h"
+#include "Article.hpp"
 
 enum CONSTE_BTN {
 	BTN_AJOUTER_BOISON = wxID_HIGHEST + 1,
@@ -40,6 +41,8 @@ public:
 	wxBoxSizer* sizer_comende;
 	//static boison
 	wxStaticBoxSizer* static_boison;
+
+	wxScrolledWindow* scrole_boison;
 
 	wxBoxSizer* sizer_boison1;
 	wxBoxSizer* sizer_boison2;
