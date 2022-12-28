@@ -1,0 +1,17 @@
+./prog 
+make all
+./prog 
+make all
+./prog 
+make all
+./prog 
+make all
+./prog 
+make all
+./prog 
+make all
+./prog 
+make mrproper
+history
+history git
+history -a git
