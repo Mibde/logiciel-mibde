@@ -1,10 +1,9 @@
 #include "MyFrame.hpp"
-
+/*
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-    EVT_BUTTON(CONSTE_BTN::BTN_AJOUTER_BOISON, MyFrame::EventAjouteBoison)
     EVT_BUTTON(CONSTE_BTN::BTN_AJOUTER_SNACK, MyFrame::EventAjouteSnack)
 END_EVENT_TABLE()
-
+*/
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     : wxFrame(NULL, wxID_ANY, title, pos, size) {
     /*
@@ -12,7 +11,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     SetWindowStyle(styleflag | wxSTAY_ON_TOP);
     */
     // Création du panel d'affichage
-
+    
 
     panelAffichage = new wxPanel(this, -1);
     //les box
@@ -33,8 +32,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     sizer_boison2->Add(sizer_boison_iteme2, 5, wxALL | wxEXPAND, 0);
     sizer_boison2->Add(sizer_boison_button2, 1, wxALL | wxEXPAND, 0);
 
-    wxButton* ajoute_boison = new wxButton(panelAffichage, CONSTE_BTN::BTN_AJOUTER_BOISON, "ajoute");
-    wxButton* suprime_boison = new wxButton(panelAffichage, CONSTE_BTN::BTN_SUPRIME_BOISON, "suprime");
+    wxButton* ajoute_boison = new wxButton(panelAffichage, -1, "ajoute");
+    wxButton* suprime_boison = new wxButton(panelAffichage, -1, "suprime");
     
     sizer_boison_button2->Add(ajoute_boison, 1);
     sizer_boison_button2->Add(suprime_boison, 1);
@@ -63,8 +62,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     sizer_snack2->Add(sizer_snack_iteme2, 5, wxALL | wxEXPAND, 0);
     sizer_snack2->Add(sizer_snack_button2, 1, wxALL | wxEXPAND, 0);
 
-    wxButton* ajoute_snack = new wxButton(panelAffichage, CONSTE_BTN::BTN_AJOUTER_SNACK, "ajoute");
-    wxButton* suprime_snack = new wxButton(panelAffichage, CONSTE_BTN::BTN_SUPRIME_SNACK, "suprime");
+    wxButton* ajoute_snack = new wxButton(panelAffichage, -1, "ajoute");
+    wxButton* suprime_snack = new wxButton(panelAffichage, -1, "suprime");
 
     sizer_snack_button2->Add(ajoute_snack, 1);
     sizer_snack_button2->Add(suprime_snack, 1);
@@ -85,10 +84,10 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     // vendre a une persone
     sizer_init->Add(sizer_comende, 1, wxALL | wxEXPAND, 0);
     panelAffichage->SetSizer(sizer_init);
+    ajoute_boison->Bind(wxEVT_BUTTON, &MyFrame::EventAjouteBoison, this);
+    ajoute_snack->Bind(wxEVT_BUTTON, &MyFrame::EventAjouteSnack, this);
     
 }
-
-
 
 
 
@@ -132,13 +131,13 @@ void MyFrame::EventAjouteBoison(wxCommandEvent& event) {
     
 }
 void MyFrame::AddBoisson(int index) {
-    if (index <1)
+    if (index <10)
         sizer_boison1->Add(liste_boisson[index], 0, wxALL | wxEXPAND, 0);
     else
         sizer_boison_iteme2->Add(liste_boisson[index], 0, wxALL | wxEXPAND, 0);
 }
 void MyFrame::AddSnack(int index) {
-    if (index <1)
+    if (index <10)
         sizer_snack1->Add(liste_snack[index], 0, wxALL | wxEXPAND, 0);
     else
         sizer_snack_iteme2->Add(liste_snack[index], 0, wxALL | wxEXPAND, 0);

@@ -16,14 +16,10 @@
 #include <iostream>
 #include<iomanip>
 #include <fstream>
+
 #include "Article.hpp"
 
-enum CONSTE_BTN {
-	BTN_AJOUTER_BOISON = wxID_HIGHEST + 1,
-	BTN_SUPRIME_BOISON,
-	BTN_AJOUTER_SNACK,
-	BTN_SUPRIME_SNACK,
-};
+
 
 using namespace std;
 class MyFrame : public wxFrame
@@ -71,7 +67,7 @@ private:
 	void AddSnack(int);
 	void EventAjouteBoison(wxCommandEvent& event);
 	void EventAjouteSnack(wxCommandEvent& event);
-	DECLARE_EVENT_TABLE()
+
 };
 
 
