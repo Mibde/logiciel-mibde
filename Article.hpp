@@ -13,17 +13,35 @@ using namespace std;
 
 
 class Article : public wxPanel {
-public:
+private:
 	wxBoxSizer* sizer_article;
+	wxBoxSizer* sizer_info_parame;
+	wxBoxSizer* sizer_info;
+	wxBoxSizer* sizer_parame;
+
 	wxPanel* panel_imag_article;
+	wxPanel* panel_icon_vegan;
 	string chemins_ime;
 	wxStaticBitmap* imagae_article;
+	wxStaticBitmap* icon_vegan;
+	wxBitmapButton* btn_sup_article;
+	wxBitmapButton* btn_parame;
+
 	wxButton* btn_validation;
+
 	wxSpinCtrlDouble* prix_article;
+
 	wxSpinCtrl* article;
 	string nom;
+
 	double prix;
+
 	int nb_article;
+public:
+
+	void InitIconVegan();
+	void InitSupArticle();
+	void InitParame();
 	void InitImageArticle();
 	void AddArticle();
 	void EnregistreArticle(ofstream&);

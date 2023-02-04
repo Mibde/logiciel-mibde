@@ -17,14 +17,14 @@
 #include<iomanip>
 #include <fstream>
 
-#include "Article.hpp"
 
+#include "Categorie.hpp"
 
 
 using namespace std;
 class MyFrame : public wxFrame
 {
-public:
+private:
 	int indexBoisson = 0;
 	int indexSnack = 0;
 	vector<Article*> liste_boisson;
@@ -33,40 +33,25 @@ public:
 
 
 	wxBoxSizer* sizer_init;
-	wxBoxSizer* sizer_snack_et_boison;
+	wxBoxSizer* sizer_categorie;
 	wxBoxSizer* sizer_comende;
 	//static boison
-	wxStaticBoxSizer* static_boison;
-
+	Categorie* static_boison;
+	Categorie* static_snack;
+	Categorie* static_nouie;
+	Categorie* static_diver;
 	wxScrolledWindow* scrole_boison;
 
-	wxBoxSizer* sizer_boison1;
-	wxBoxSizer* sizer_boison2;
 
-	wxBoxSizer* sizer_boison_iteme2;
-	wxBoxSizer* sizer_boison_button2;
-	//staatic snack
-	wxStaticBoxSizer* static_snack;
-	wxBoxSizer* sizer_snack1;
-	wxBoxSizer* sizer_snack2;
-	
-	wxBoxSizer* sizer_snack_iteme2;
-	wxBoxSizer* sizer_snack_button2;
+
+
+
+public:
 
 
 	MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size);
 	
 
-private:
-	wxString CheminsDeFicher();
-	void EnregistrementBoissons();
-	void RecuperationBoissons();
-	void EnregistrementSnack();
-	void RecuperationSnack();
-	void AddBoisson(int);
-	void AddSnack(int);
-	void EventAjouteBoison(wxCommandEvent& event);
-	void EventAjouteSnack(wxCommandEvent& event);
 
 };
 
