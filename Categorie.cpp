@@ -48,9 +48,10 @@ void Categorie::EventAjouteArticle(wxCommandEvent& event) {
         {
             liste_aliment.push_back(tmp);
         
-            sizer_categorie->Add(liste_aliment[liste_aliment.size()-1], 0, wxALL | wxEXPAND, 0);
+            sizer_categorie->Add(tmp, 0, wxALL | wxEXPAND, 0);
+            panel_parent->Layout();
         }else{
-            cout << "article non alouer" << endl;
+            wxLogError("Une Erreur et survenus au moment de l'ajous de l'article");
         }
     }
 

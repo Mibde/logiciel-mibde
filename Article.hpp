@@ -9,21 +9,25 @@
 #include <iostream>
 #include<iomanip>
 #include <fstream>
+#include <vector>
 using namespace std;
 
 
 class Article : public wxPanel {
 private:
+
+	vector<wxPanel*> panel_icon_article;
+	vector<wxStaticBitmap*> icon_article;
 	wxBoxSizer* sizer_article;
 	wxBoxSizer* sizer_info_parame;
 	wxBoxSizer* sizer_info;
 	wxBoxSizer* sizer_parame;
 
 	wxPanel* panel_imag_article;
-	wxPanel* panel_icon_vegan;
+
 	string chemins_ime;
 	wxStaticBitmap* imagae_article;
-	wxStaticBitmap* icon_vegan;
+
 	wxBitmapButton* btn_sup_article;
 	wxBitmapButton* btn_parame;
 
@@ -39,7 +43,7 @@ private:
 	int nb_article;
 public:
 
-	void InitIconVegan();
+	void InitIcon(string);
 	void InitSupArticle();
 	void InitParame();
 	void InitImageArticle();

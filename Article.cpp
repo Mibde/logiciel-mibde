@@ -19,12 +19,19 @@ void Article::AddArticle() {
 	
 	sizer_parame->Add(btn_sup_article, 0);
 	sizer_parame->Add(btn_parame, 0);
-	sizer_parame->Add(panel_icon_vegan, 0);
-
+	//icon article
+	InitIcon("icon/vegan.jpg");
+	InitIcon("icon/vegetarian.png");
+	InitIcon("icon/halal.jpg");
+	InitIcon("icon/kosher.png");
+	InitIcon("icon/recyclable.png");
+	InitIcon("icon/rouge.jpg");
+	
 	sizer_info_parame->Add(sizer_info, 0);
 	sizer_info->Add(btn_validation, 0, wxFIXED_MINSIZE);
 	sizer_info->Add(prix_article, 0, wxFIXED_MINSIZE);
 	sizer_info->Add(article, 0, wxFIXED_MINSIZE);
+	
 	this->SetSizer(sizer_article);
 }
 void Article::InitImageArticle() {
@@ -39,9 +46,6 @@ void Article::InitImageArticle() {
 	imagae_article = new wxStaticBitmap(panel_imag_article, wxID_ANY,
 		parametre_imag);
 	
-	//image vegane
-	InitIconVegan();
-	
 	//btn suprestion article
 	InitSupArticle();
 
@@ -55,14 +59,17 @@ void Article::InitImageArticle() {
 	article = new wxSpinCtrl(this, -1, wxEmptyString, wxDefaultPosition, wxSize(130,30), 16284L, 0, 1000, nb_article, nom);
 }
 
-void Article::InitIconVegan(){
-	panel_icon_vegan = new wxPanel(this, -1);
-	wxBitmap parametre_icon_vegan("icon/vegan.jpg", wxBITMAP_TYPE_PNG);
-
-	if(!(icon_vegan = new wxStaticBitmap(panel_icon_vegan, wxID_ANY,
-		parametre_icon_vegan))){
-			cout << "nulllll" << endl;
-		}
+void Article::InitIcon(string chemin_icon){
+	panel_icon_article.push_back(new wxPanel(this, -1));
+	wxBitmap bitmap_icon(chemin_icon, wxBITMAP_TYPE_PNG);
+	wxStaticBitmap* tmp;
+	if(tmp = new wxStaticBitmap(panel_icon_article[panel_icon_article.size()-1], wxID_ANY,
+		bitmap_icon)){
+			icon_article.push_back(tmp);
+	}else{
+		cout << "erreur!!!!!!!!" << endl;
+	}
+	sizer_parame->Add(panel_icon_article[panel_icon_article.size()-1], 0);
 }
 
 void Article::InitSupArticle(){

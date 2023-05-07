@@ -19,7 +19,7 @@
 
 
 #include "Categorie.hpp"
-
+#include "Membre.hpp"
 
 using namespace std;
 class MyFrame : public wxFrame
@@ -40,7 +40,9 @@ private:
 	Categorie* static_snack;
 	Categorie* static_nouie;
 	Categorie* static_diver;
+	Membre* membres;
 	wxScrolledWindow* scrole_boison;
+
 
 
 
