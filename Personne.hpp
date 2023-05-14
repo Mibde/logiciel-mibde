@@ -4,14 +4,23 @@
 #include <wx/checkbox.h>
 #include <string>
 #include <iostream>
+#include <vector>
+#include <algorithm>
+#include "Membre.hpp"
+
 using namespace std;
-class Personne : public wxBoxSizer
+class Membre;
+class Personne : public wxPanel
 {
 private:
+    wxBoxSizer* size_personne;
     wxCheckBox* testCheck;
-    wxBoxSizer* box_persones;
+    wxBitmapButton* btn_sup_personne;
+    Membre* membre;
 public:
-    Personne(wxPanel*, const wxString);
+    Personne(wxPanel*, Membre* membres, const wxString);
+    void Supretions(wxCommandEvent& event);
+    
 
 };
 

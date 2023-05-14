@@ -14,11 +14,11 @@
 #include <wx/wfstream.h>
 #include <wx/datstrm.h>
 #include <iostream>
-
+#include <algorithm>
 #include "Article.hpp"
 
-
-
+using namespace std;
+class Article;
 class Categorie : public wxStaticBoxSizer
 {
 private:
@@ -37,6 +37,7 @@ private:
     
 
 public:
+    void SupprimerArticle(Article*);
     Categorie(wxPanel*, wxString);
     void EventAjouteArticle(wxCommandEvent& event);
     wxString CheminsDeFicher();

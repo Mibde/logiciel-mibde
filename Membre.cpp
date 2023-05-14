@@ -2,6 +2,7 @@
 
 Membre::Membre(wxPanel* panel_parent) : wxStaticBoxSizer(wxVERTICAL, panel_parent, "Membres")
 {
+    this->SetMinSize(wxSize(200, 200));
     this->panel_parent = panel_parent;
     scrole_membres = new wxScrolledWindow(panel_parent);
     sizer_membres = new wxBoxSizer(wxVERTICAL);
@@ -26,8 +27,8 @@ void Membre::NewMembre(wxCommandEvent& event)
     if (name_is.ShowModal() == wxID_OK && ((nom = name_is.GetValue()) != ""))
     {
         Personne* new_personne;
-        if ((new_personne = new Personne(scrole_membres, nom)))
-        {
+        if ((new_personne = new Personne(scrole_membres, this, nom)))
+        {   
             membres.push_back(new_personne);
             sizer_membres->Add(new_personne, 0, wxALL | wxEXPAND, 0);
             sizer_membres->Layout();
@@ -42,4 +43,27 @@ void Membre::NewMembre(wxCommandEvent& event)
     }
     name_is.Destroy();
 }
+
+void Membre::SupprimerPersonne(Personne* personne) {
+    // Parcours de tous les éléments du sizer
+    for (unsigned int i = 0; i < sizer_membres->GetItemCount(); i++) {
+        // Obtention de l'élément sizer correspondant
+        wxSizerItem* item = sizer_membres->GetItem(i);
+        // Comparaison du pointeur
+        if (item->GetWindow() == personne) {
+            // Suppression de l'élément du sizer
+            sizer_membres->Remove(i);
+            // Suppression de l'élément du vecteur de personnes
+            auto it = find(membres.begin(), membres.end(), personne);
+            if (it != membres.end()) {
+                membres.erase(it);
+            }
+            // Destruction de l'objet personne
+            delete personne;
+            break;
+        }
+    }
+    sizer_membres->Layout();
+}
+
 

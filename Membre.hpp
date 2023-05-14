@@ -3,12 +3,16 @@
 
 #include <wx/wx.h>
 #include <vector>
+#include <iostream>
 #include "Personne.hpp"
-
+using namespace std;
+class Personne;
 class Membre : public wxStaticBoxSizer
 {
 public:
     Membre(wxPanel* panel_parent);
+    void SupprimerPersonne(Personne* personne);
+    vector<Personne*> membres;
 
 private:
     void NewMembre(wxCommandEvent& event);
@@ -22,7 +26,7 @@ private:
     wxBoxSizer* sizer_scrole;
     wxBoxSizer* sizer_membres_button;
     wxButton* ajoute_article;
-    std::vector<Personne*> membres;
+    
 };
 
 #endif // MEMBRE_HPP

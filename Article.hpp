@@ -1,5 +1,5 @@
 #ifndef ARTICLE_H_INCLUDED
-#define ARTiCLE_H_INCLUDED
+#define ARTICLE_H_INCLUDED
 
 // Le header wxWidgets de base
 //@ts-ignore
@@ -10,9 +10,9 @@
 #include<iomanip>
 #include <fstream>
 #include <vector>
+#include "Categorie.hpp"
 using namespace std;
-
-
+class Categorie;
 class Article : public wxPanel {
 private:
 
@@ -41,6 +41,8 @@ private:
 	double prix;
 
 	int nb_article;
+
+	Categorie* categorie;
 public:
 
 	void InitIcon(string);
@@ -50,8 +52,7 @@ public:
 	void AddArticle();
 	void EnregistreArticle(ofstream&);
 	wxString nomArticle(wxString chemins);
-	Article();
-	Article(wxPanel*, const int, wxString, double, int);
+	Article(wxPanel*, Categorie*, const int, wxString, double, int);
 };
 
 #endif // ARTICLE_H_INCLUDED

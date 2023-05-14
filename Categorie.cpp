@@ -44,7 +44,7 @@ void Categorie::EventAjouteArticle(wxCommandEvent& event) {
     }
     else {
         Article* tmp;
-        if((tmp = new Article(scrole_categorie, wxID_ANY, chemins_image, 0.0, 0)))
+        if((tmp = new Article(scrole_categorie, this, wxID_ANY, chemins_image, 0.0, 0)))
         {
             liste_aliment.push_back(tmp);
         
@@ -73,4 +73,26 @@ wxString Categorie::CheminsDeFicher() {
         return "";
     }
     return openFileDialog.GetPath();
+}
+
+void Categorie::SupprimerArticle(Article* article) {
+    // Parcours de tous les éléments du sizer
+    for (unsigned int i = 0; i < sizer_categorie->GetItemCount(); i++) {
+        // Obtention de l'élément sizer correspondant
+        wxSizerItem* item = sizer_categorie->GetItem(i);
+        // Comparaison du pointeur
+        if (item->GetWindow() == article) {
+            // Suppression de l'élément du sizer
+            sizer_categorie->Remove(i);
+            // Suppression de l'élément du vecteur de liste_aliment
+            auto it = find_if(liste_aliment.begin(), liste_aliment.end(), [=](Article* a) { return a == article; });
+            if (it != liste_aliment.end()) {
+                liste_aliment.erase(it);
+            }
+            // Destruction de l'objet article
+            delete article;
+            break;
+        }
+    }
+    sizer_categorie->Layout();
 }

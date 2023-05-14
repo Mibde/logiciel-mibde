@@ -1,8 +1,6 @@
 #include "Article.hpp"
-Article::Article() {
 
-}
-Article::Article(wxPanel* panel_parent, const int IDBTN, wxString chemins_image, double prix, int nb_article) : wxPanel(panel_parent, IDBTN) {
+Article::Article(wxPanel* panel_parent, Categorie* categorie, const int IDBTN, wxString chemins_image, double prix, int nb_article) : wxPanel(panel_parent, IDBTN), categorie(categorie) {
 	//initialisations des widget
 	this->prix = prix;
 	this->nb_article = nb_article;
@@ -11,6 +9,7 @@ Article::Article(wxPanel* panel_parent, const int IDBTN, wxString chemins_image,
 	InitImageArticle();
 	//apelle des widget
 	AddArticle();
+	btn_sup_article->Bind(wxEVT_BUTTON, [this, categorie](wxCommandEvent& event) { categorie->SupprimerArticle(this); });
 }
 void Article::AddArticle() {
 	sizer_article->Add(panel_imag_article, 0);
