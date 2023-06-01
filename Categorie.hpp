@@ -6,7 +6,8 @@
 #include <wx/scrolwin.h>
 #include <wx/statline.h>
 #include <wx/sizer.h>
-
+#include <stdio.h>
+#include <stdlib.h>
 
 #include <string>
 #include <vector>
@@ -16,6 +17,7 @@
 #include <iostream>
 #include <algorithm>
 #include "Article.hpp"
+#include "InfoArticle.hpp"
 
 using namespace std;
 class Article;
@@ -34,7 +36,6 @@ private:
     wxFrame* frame_parent;
     wxButton* ajoute_article;
     wxPanel* panel_parent;
-    
 
 public:
     void SupprimerArticle(Article*);

@@ -11,25 +11,28 @@
 #include <fstream>
 #include <vector>
 #include "Categorie.hpp"
+#include "InfoArticle.hpp"
 using namespace std;
 class Categorie;
 class Article : public wxPanel {
 private:
-
+	wxPanel* panel_parent;
 	vector<wxPanel*> panel_icon_article;
 	vector<wxStaticBitmap*> icon_article;
 	wxBoxSizer* sizer_article;
 	wxBoxSizer* sizer_info_parame;
 	wxBoxSizer* sizer_info;
 	wxBoxSizer* sizer_parame;
+	wxBoxSizer* sizer_parame_icon;
 
 	wxPanel* panel_imag_article;
 
-	string chemins_ime;
+	wxString  chemins_ime;
 	wxStaticBitmap* imagae_article;
 
 	wxBitmapButton* btn_sup_article;
 	wxBitmapButton* btn_parame;
+	wxBitmapButton* btn_info;
 
 	wxButton* btn_validation;
 
@@ -42,17 +45,26 @@ private:
 
 	int nb_article;
 
-	Categorie* categorie;
-public:
+	wxPanel* rupture_panel;
+	wxStaticBitmap* rupture_Bitmap;
+	int rupture;
+	vector<bool> caracteristique;
+	wxString descriptif;
 
+	Categorie* categorie;
+	void InitInfo();
 	void InitIcon(string);
 	void InitSupArticle();
 	void InitParame();
 	void InitImageArticle();
 	void AddArticle();
-	void EnregistreArticle(ofstream&);
-	wxString nomArticle(wxString chemins);
-	Article(wxPanel*, Categorie*, const int, wxString, double, int);
+	void chargeIcon();
+	void AddIcon();
+	void RuptureIcone();
+public:
+	void EventParame(wxCommandEvent& event);
+	void EventInfo(wxCommandEvent& event);
+	Article(wxPanel*, Categorie*, wxString, wxString, double, int, int, vector<bool>, wxString);
 };
 
 #endif // ARTICLE_H_INCLUDED

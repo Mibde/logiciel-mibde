@@ -34,9 +34,49 @@ Categorie::Categorie(wxPanel* panel_parent, wxString nom) : wxStaticBoxSizer(wxV
 }
 
 
-void Categorie::EventAjouteArticle(wxCommandEvent& event) {
-    wxInitAllImageHandlers();
 
+void Categorie::EventAjouteArticle(wxCommandEvent& event) {
+    //wxInitAllImageHandlers();
+    wxTextEntryDialog name_is(this->panel_parent, wxT("Le nom de l'article (sans acens)"), wxT("Ajouter un article"));
+    name_is.SetTextValidator(wxFILTER_ALPHA);
+    wxString nom;
+
+    if (name_is.ShowModal() == wxID_OK && ((nom = name_is.GetValue()) != ""))
+    {
+        wxString descriptif;
+        vector<bool> caracteristique;
+        int rupture;
+        int stock;
+        double prix;
+        wxString chemin;
+        if(true){
+            InfoArticle dialo(panel_parent, nom);
+            if (dialo.ShowModal() == wxID_OK)
+            {
+                descriptif = dialo.GetDescriptif();
+                caracteristique = dialo.GetCaracteristique();
+                rupture = dialo.GetRupture();
+                stock = dialo.GetStock();
+                prix = dialo.GetPrix();
+                chemin = dialo.GetChemin();
+            }
+        }
+
+        Article* tmp;
+        if((tmp = new Article(scrole_categorie, this, nom, chemin, prix, stock, rupture, caracteristique, descriptif)))
+        {
+            liste_aliment.push_back(tmp);
+                    
+            sizer_categorie->Add(tmp, 0, wxALL | wxEXPAND, 0);
+            panel_parent->Layout();
+        }else{
+            wxLogError("Une Erreur et survenus au moment de l'ajous de l'article");
+        }
+
+    }
+    name_is.Destroy();
+    
+    /*
     wxString chemins_image = CheminsDeFicher();
 
     if (chemins_image == "") {
@@ -55,7 +95,7 @@ void Categorie::EventAjouteArticle(wxCommandEvent& event) {
         }
     }
 
-    
+    */
 }
 
 
@@ -84,13 +124,14 @@ void Categorie::SupprimerArticle(Article* article) {
         if (item->GetWindow() == article) {
             // Suppression de l'élément du sizer
             sizer_categorie->Remove(i);
+            sizer_categorie->Detach(article);
             // Suppression de l'élément du vecteur de liste_aliment
             auto it = find_if(liste_aliment.begin(), liste_aliment.end(), [=](Article* a) { return a == article; });
             if (it != liste_aliment.end()) {
                 liste_aliment.erase(it);
             }
             // Destruction de l'objet article
-            delete article;
+            article->Destroy();
             break;
         }
     }
