@@ -1,15 +1,8 @@
 #include "MyFrame.hpp"
-/*
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-    EVT_BUTTON(CONSTE_BTN::BTN_AJOUTER_SNACK, MyFrame::EventAjouteSnack)
-END_EVENT_TABLE()
-*/
+
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     : wxFrame(NULL, wxID_ANY, title, pos, size) {
-    /*
-    long styleflag = GetWindowStyle();
-    SetWindowStyle(styleflag | wxSTAY_ON_TOP);
-    */
+
     // Création du panel d'affichage
     
 
@@ -19,11 +12,13 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     sizer_categorie = new wxBoxSizer(wxHORIZONTAL);
     sizer_comende = new wxBoxSizer(wxHORIZONTAL);
     //les static box
-
-    static_boison = new Categorie(panelAffichage, "Boison : ");
-    static_snack = new Categorie(panelAffichage, "Snack : ");
-    static_nouie = new Categorie(panelAffichage, "Nouie : ");
-    static_diver = new Categorie(panelAffichage, "Diver : ");
+    //les commande des client
+    commande = new Commande(panelAffichage);
+    //les categorie darticle proposer
+    static_boison = new Categorie(panelAffichage, "Boison : ", commande);
+    static_snack = new Categorie(panelAffichage, "Snack : ", commande);
+    static_nouie = new Categorie(panelAffichage, "Nouie : ", commande);
+    static_diver = new Categorie(panelAffichage, "Diver : ", commande);
 
     //la line
     wxStaticLine* ligneHoriz = new wxStaticLine(panelAffichage, -1);
@@ -36,8 +31,11 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     sizer_categorie->Add(static_nouie, 1, wxALL | wxEXPAND, 5);
     sizer_categorie->Add(static_diver, 1, wxALL | wxEXPAND, 5);
     
-    Membre* membres = new Membre(panelAffichage);
+    membres = new Membre(panelAffichage);
     sizer_comende->Add(membres, 0, wxALL | wxEXPAND, 0);
+
+    
+    sizer_comende->Add(commande, 0, wxALL | wxEXPAND, 0);
     
     //separations
     sizer_init->Add(ligneHoriz, 0, wxALL | wxEXPAND, 0);

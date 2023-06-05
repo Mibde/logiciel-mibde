@@ -1,7 +1,7 @@
 #include "InfoArticle.hpp"
 
 InfoArticle::InfoArticle(wxPanel* parent, const wxString nom) : wxDialog(parent, -1, nom, wxDefaultPosition, wxSize(500, 700)){
-    InitInfoArticle(parent, nom, "", 0.0, 0, 0, vector<bool>{false, false, false, false, false}, "");
+    InitInfoArticle(parent, nom, _(""), 0.0, 0, 0, vector<bool>{false, false, false, false, false}, _(""));
 
 }
 
@@ -66,11 +66,16 @@ void InfoArticle::InitInfoArticle(wxPanel* parent, const wxString nom, wxString 
     wxDefaultPosition, wxDefaultSize, 0);
     ButtonSizer->AddButton(BtnCancel);
     ButtonSizer->Realize();
-
+    
+    //sizer_premier->Add(CreateStdDialogButtonSizer(wxOK | wxCANCEL), 0, wxEXPAND | wxALL, 5);
 
 
     this->SetSizer(sizer_premier);
     button_image->Bind(wxEVT_BUTTON, &InfoArticle::EventCheminImage, this);
+    //BtnCancel->Bind(wxEVT_BUTTON, &InfoArticle::DeleteInfo, this);
+}
+void InfoArticle::DeleteInfo(wxCommandEvent& event){
+    cout << "le suside et une solutions" << endl;
 }
 
 wxString InfoArticle::GetDescriptif(){

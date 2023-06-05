@@ -18,9 +18,11 @@
 #include <algorithm>
 #include "Article.hpp"
 #include "InfoArticle.hpp"
+#include "Commande.hpp"
 
 using namespace std;
 class Article;
+class Commande;
 class Categorie : public wxStaticBoxSizer
 {
 private:
@@ -36,10 +38,11 @@ private:
     wxFrame* frame_parent;
     wxButton* ajoute_article;
     wxPanel* panel_parent;
+    Commande* commande;
 
 public:
     void SupprimerArticle(Article*);
-    Categorie(wxPanel*, wxString);
+    Categorie(wxPanel*, wxString, Commande*);
     void EventAjouteArticle(wxCommandEvent& event);
     wxString CheminsDeFicher();
 };

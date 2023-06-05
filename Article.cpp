@@ -1,6 +1,6 @@
 #include "Article.hpp"
 
-Article::Article(wxPanel* panel_parent, Categorie* categorie, wxString nom, wxString chemins_image, double prix, int nb_article, int rupture, vector<bool> caracteristique, wxString descriptif) : wxPanel(panel_parent, wxID_ANY), categorie(categorie) {
+Article::Article(wxPanel* panel_parent, Categorie* categorie, wxString nom, wxString chemins_image, double prix, int nb_article, int rupture, vector<bool> caracteristique, wxString descriptif, Commande* commande) : wxPanel(panel_parent, wxID_ANY), categorie(categorie), commande(commande) {
 	//initialisations des widget
 	this->panel_parent = panel_parent;
 	this->prix = prix;
@@ -16,6 +16,7 @@ Article::Article(wxPanel* panel_parent, Categorie* categorie, wxString nom, wxSt
 	btn_sup_article->Bind(wxEVT_BUTTON, [this, categorie](wxCommandEvent& event) { categorie->SupprimerArticle(this); });
 	btn_parame->Bind(wxEVT_BUTTON, &Article::EventParame, this);
 	btn_info->Bind(wxEVT_BUTTON, &Article::EventInfo, this);
+	btn_validation->Bind(wxEVT_BUTTON, &Article::EventVenteProduit, this);
 }
 void Article::AddArticle() {
 	sizer_article->Add(panel_imag_article, 0);
@@ -173,4 +174,29 @@ void Article::EventInfo(wxCommandEvent& event){
 	infoDialog->ShowModal();
 	infoDialog->Destroy();
 }
+void Article::AnuleProduit(){
+	article->SetValue(article->GetValue()+1);
+}
+void Article::EventVenteProduit(wxCommandEvent& event){
+	if(article->GetValue()>0){
+		article->SetValue(article->GetValue()-1);
+		commande->NewCommande(this);
+	}
+	
+}
 
+wxString Article::GetNom(){
+	return nom;
+}
+
+double Article::GetPrix(){
+	return prix;
+}
+
+void Article::AnulationsVente(){
+	article->SetValue(nb_article);
+}
+
+void Article::ConfirmeVente(){
+	nb_article = article->GetValue();
+}

@@ -12,6 +12,7 @@
 #include <vector>
 #include "Categorie.hpp"
 #include "InfoArticle.hpp"
+#include "Commande.hpp"
 using namespace std;
 class Categorie;
 class Article : public wxPanel {
@@ -39,7 +40,7 @@ private:
 	wxSpinCtrlDouble* prix_article;
 
 	wxSpinCtrl* article;
-	string nom;
+	wxString nom;
 
 	double prix;
 
@@ -52,6 +53,8 @@ private:
 	wxString descriptif;
 
 	Categorie* categorie;
+	
+	Commande* commande;
 	void InitInfo();
 	void InitIcon(string);
 	void InitSupArticle();
@@ -62,9 +65,15 @@ private:
 	void AddIcon();
 	void RuptureIcone();
 public:
+	void ConfirmeVente();
+	void AnulationsVente();
+	void AnuleProduit();
+	wxString GetNom();
+	double GetPrix();
 	void EventParame(wxCommandEvent& event);
 	void EventInfo(wxCommandEvent& event);
-	Article(wxPanel*, Categorie*, wxString, wxString, double, int, int, vector<bool>, wxString);
+	void EventVenteProduit(wxCommandEvent& event);
+	Article(wxPanel*, Categorie*, wxString, wxString, double, int, int, vector<bool>, wxString, Commande*);
 };
 
 #endif // ARTICLE_H_INCLUDED

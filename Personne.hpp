@@ -19,7 +19,6 @@ private:
     Membre* membre;
 public:
     Personne(wxPanel*, Membre* membres, const wxString);
-    void Supretions(wxCommandEvent& event);
     
 
 };

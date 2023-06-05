@@ -16,7 +16,7 @@
 #include <iostream>
 #include<iomanip>
 #include <fstream>
-
+#include "Commande.hpp"
 
 #include "Categorie.hpp"
 #include "Membre.hpp"
@@ -43,7 +43,7 @@ private:
 	Membre* membres;
 	wxScrolledWindow* scrole_boison;
 
-
+	Commande* commande;
 
 
 

@@ -1,10 +1,8 @@
 #include "Categorie.hpp"
 
 
-Categorie::Categorie(wxPanel* panel_parent, wxString nom) : wxStaticBoxSizer(wxVERTICAL, panel_parent, nom)
+Categorie::Categorie(wxPanel* panel_parent, wxString nom, Commande* commande) : wxStaticBoxSizer(wxVERTICAL, panel_parent, nom), commande(commande), panel_parent(panel_parent)
 {
-    
-    this->panel_parent = panel_parent;
 
     scrole_categorie = new wxScrolledWindow(panel_parent);
 
@@ -37,7 +35,7 @@ Categorie::Categorie(wxPanel* panel_parent, wxString nom) : wxStaticBoxSizer(wxV
 
 void Categorie::EventAjouteArticle(wxCommandEvent& event) {
     //wxInitAllImageHandlers();
-    wxTextEntryDialog name_is(this->panel_parent, wxT("Le nom de l'article (sans acens)"), wxT("Ajouter un article"));
+    wxTextEntryDialog name_is(panel_parent, wxT("Le nom de l'article (sans acens)"), wxT("Ajouter un article"));
     name_is.SetTextValidator(wxFILTER_ALPHA);
     wxString nom;
 
@@ -49,9 +47,11 @@ void Categorie::EventAjouteArticle(wxCommandEvent& event) {
         int stock;
         double prix;
         wxString chemin;
+        int res;
         if(true){
             InfoArticle dialo(panel_parent, nom);
-            if (dialo.ShowModal() == wxID_OK)
+            res = dialo.ShowModal();
+            if (res == wxID_OK)
             {
                 descriptif = dialo.GetDescriptif();
                 caracteristique = dialo.GetCaracteristique();
@@ -60,42 +60,20 @@ void Categorie::EventAjouteArticle(wxCommandEvent& event) {
                 prix = dialo.GetPrix();
                 chemin = dialo.GetChemin();
             }
+            //if( res == wxID_CANCEL){cout << "nonnnn" << endl;}
         }
 
         Article* tmp;
-        if((tmp = new Article(scrole_categorie, this, nom, chemin, prix, stock, rupture, caracteristique, descriptif)))
+        if(res != wxID_CANCEL &&(tmp = new Article(scrole_categorie, this, nom, chemin, prix, stock, rupture, caracteristique, descriptif, commande)))
         {
             liste_aliment.push_back(tmp);
                     
             sizer_categorie->Add(tmp, 0, wxALL | wxEXPAND, 0);
             panel_parent->Layout();
-        }else{
-            wxLogError("Une Erreur et survenus au moment de l'ajous de l'article");
         }
 
     }
     name_is.Destroy();
-    
-    /*
-    wxString chemins_image = CheminsDeFicher();
-
-    if (chemins_image == "") {
-        wxMessageBox("tu na pas rensenier de Fichier");
-    }
-    else {
-        Article* tmp;
-        if((tmp = new Article(scrole_categorie, this, wxID_ANY, chemins_image, 0.0, 0)))
-        {
-            liste_aliment.push_back(tmp);
-        
-            sizer_categorie->Add(tmp, 0, wxALL | wxEXPAND, 0);
-            panel_parent->Layout();
-        }else{
-            wxLogError("Une Erreur et survenus au moment de l'ajous de l'article");
-        }
-    }
-
-    */
 }
 
 

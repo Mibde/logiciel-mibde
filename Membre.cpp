@@ -2,7 +2,7 @@
 
 Membre::Membre(wxPanel* panel_parent) : wxStaticBoxSizer(wxVERTICAL, panel_parent, "Membres")
 {
-    this->SetMinSize(wxSize(200, 200));
+    this->SetMinSize(wxSize(300, 200));
     this->panel_parent = panel_parent;
     scrole_membres = new wxScrolledWindow(panel_parent);
     sizer_membres = new wxBoxSizer(wxVERTICAL);
@@ -21,7 +21,6 @@ Membre::Membre(wxPanel* panel_parent) : wxStaticBoxSizer(wxVERTICAL, panel_paren
 void Membre::NewMembre(wxCommandEvent& event)
 {
     wxTextEntryDialog name_is(this->panel_parent, wxT("Le Nom Prenom du nouvaus menbre (sans acens)"), wxT("Ajouter un membre"));
-    name_is.SetTextValidator(wxFILTER_ALPHA);
     wxString nom;
 
     if (name_is.ShowModal() == wxID_OK && ((nom = name_is.GetValue()) != ""))
@@ -59,7 +58,7 @@ void Membre::SupprimerPersonne(Personne* personne) {
                 membres.erase(it);
             }
             // Destruction de l'objet personne
-            delete personne;
+            personne->Destroy();
             break;
         }
     }
