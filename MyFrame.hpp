@@ -20,11 +20,15 @@
 
 #include "Categorie.hpp"
 #include "Membre.hpp"
-
+#define ID_MOOD_ADMIN (wxID_HIGHEST + 1)
+#define ID_MOOD_UTILISATEUR (wxID_HIGHEST + 2)
 using namespace std;
+
+
 class MyFrame : public wxFrame
 {
 private:
+	
 	int indexBoisson = 0;
 	int indexSnack = 0;
 	vector<Article*> liste_boisson;
@@ -45,7 +49,7 @@ private:
 
 	Commande* commande;
 
-
+	bool mood_utilisateur;
 
 
 public:
@@ -53,6 +57,11 @@ public:
 
 	MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size);
 	
+	void OnExit();
+	void OnAdmin();
+	void OnUtilisateur();
+	void DesactiveUtilisateur();
+	void DesactiveAdmin();
 
 
 };

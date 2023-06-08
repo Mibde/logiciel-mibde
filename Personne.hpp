@@ -19,6 +19,8 @@ private:
     Membre* membre;
 public:
     Personne(wxPanel*, Membre* membres, const wxString);
+    void MoodAdmin();
+    void MoodUtilisateur();
     
 
 };

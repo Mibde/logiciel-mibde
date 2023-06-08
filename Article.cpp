@@ -84,6 +84,7 @@ void Article::InitImageArticle() {
 	btn_validation = new wxButton(this, -1, nom, wxDefaultPosition, wxDefaultSize, 0L, wxDefaultValidator, nom);
 	prix_article = new wxSpinCtrlDouble(this, -1, wxEmptyString, wxDefaultPosition, wxSize(130,30), 16384L, 0.0, 100.0, prix, 0.01, nom);
 	article = new wxSpinCtrl(this, -1, wxEmptyString, wxDefaultPosition, wxSize(130,30), 16284L, 0, 1000, nb_article, nom);
+	MoodAdmin();
 }
 
 void Article::InitIcon(string chemin_icon){
@@ -199,4 +200,18 @@ void Article::AnulationsVente(){
 
 void Article::ConfirmeVente(){
 	nb_article = article->GetValue();
+}
+void Article::MoodAdmin(){
+	btn_validation->Enable(false);
+	prix_article->Enable(true);
+	article->Enable(true);
+	btn_sup_article->Enable(true);
+	btn_parame->Enable(true);
+}
+void Article::MoodUtilisateur(){
+	prix_article->Enable(false);
+	article->Enable(false);
+	btn_sup_article->Enable(false);
+	btn_parame->Enable(false);
+	btn_validation->Enable(true);
 }

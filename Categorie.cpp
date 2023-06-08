@@ -115,3 +115,16 @@ void Categorie::SupprimerArticle(Article* article) {
     }
     sizer_categorie->Layout();
 }
+
+void Categorie::MoodAdmin(){
+    ajoute_article->Enable(true);
+    for(Article* art : liste_aliment){
+        art->MoodAdmin();
+    }
+}
+void Categorie::MoodUtilisateur(){
+    ajoute_article->Enable(false);
+    for(Article* art : liste_aliment){
+        art->MoodUtilisateur();
+    }
+}

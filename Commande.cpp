@@ -175,3 +175,14 @@ void Commande::DestroyProduit(Produit* produit)
 
     sizer_commandes->Layout();
 }
+
+void Commande::MoodUtilisateur(){
+    btn_anulation_commande->Enable(true);
+    btn_validation_commande->Enable(true);
+}
+
+void Commande::MoodAdmin(){
+    ClearCammande();
+    btn_anulation_commande->Enable(false);
+    btn_validation_commande->Enable(false);
+}

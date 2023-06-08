@@ -20,6 +20,8 @@ public:
     void DestroyProduit(Produit* produit);
     map<Article*, Produit*> commandes;
     void NewCommande(Article*);
+    void MoodUtilisateur();
+    void MoodAdmin();
 
 private:
     

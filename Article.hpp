@@ -65,6 +65,8 @@ private:
 	void AddIcon();
 	void RuptureIcone();
 public:
+	void MoodAdmin();
+	void MoodUtilisateur();
 	void ConfirmeVente();
 	void AnulationsVente();
 	void AnuleProduit();

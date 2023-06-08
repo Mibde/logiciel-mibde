@@ -13,6 +13,8 @@ public:
     Membre(wxPanel* panel_parent);
     void SupprimerPersonne(Personne* personne);
     vector<Personne*> membres;
+    void MoodAdmin();
+    void MoodUtilisateur();
 
 private:
     void NewMembre(wxCommandEvent& event);
@@ -25,7 +27,7 @@ private:
     wxBoxSizer* sizer_membres;
     wxBoxSizer* sizer_scrole;
     wxBoxSizer* sizer_membres_button;
-    wxButton* ajoute_article;
+    wxButton* ajoute_personne;
     
 };
 

@@ -8,14 +8,14 @@ Membre::Membre(wxPanel* panel_parent) : wxStaticBoxSizer(wxVERTICAL, panel_paren
     sizer_membres = new wxBoxSizer(wxVERTICAL);
 
     sizer_membres_button = new wxBoxSizer(wxHORIZONTAL);
-    ajoute_article = new wxButton(panel_parent, -1, "ajoute");
-    sizer_membres_button->Add(ajoute_article, 1);
+    ajoute_personne = new wxButton(panel_parent, -1, "ajoute");
+    sizer_membres_button->Add(ajoute_personne, 1);
 
     scrole_membres->SetSizer(sizer_membres);
     this->Add(scrole_membres, 1, wxALL | wxEXPAND, 0);
     this->Add(sizer_membres_button, 0, wxEXPAND, 0);
 
-    ajoute_article->Bind(wxEVT_BUTTON, &Membre::NewMembre, this);
+    ajoute_personne->Bind(wxEVT_BUTTON, &Membre::NewMembre, this);
 }
 
 void Membre::NewMembre(wxCommandEvent& event)
@@ -65,4 +65,15 @@ void Membre::SupprimerPersonne(Personne* personne) {
     sizer_membres->Layout();
 }
 
-
+void Membre::MoodAdmin(){
+    ajoute_personne->Enable(true);
+    for(Personne* art : membres){
+        art->MoodAdmin();
+    }
+}
+void Membre::MoodUtilisateur(){
+    ajoute_personne->Enable(false);
+    for(Personne* art : membres){
+        art->MoodUtilisateur();
+    }
+}

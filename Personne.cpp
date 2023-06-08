@@ -16,5 +16,12 @@ Personne::Personne(wxPanel* parent, Membre* membres, const wxString nom) : wxPan
     size_personne->Add(btn_sup_personne, wxALIGN_RIGHT| wxEXPAND);
     this->SetSizer(size_personne);
     btn_sup_personne->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event) { membre->SupprimerPersonne(this); });
+}
 
+void Personne::MoodAdmin(){
+    btn_sup_personne->Enable(true);
+}
+
+void Personne::MoodUtilisateur(){
+    btn_sup_personne->Enable(false);
 }

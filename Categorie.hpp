@@ -41,6 +41,8 @@ private:
     Commande* commande;
 
 public:
+    void MoodAdmin();
+    void MoodUtilisateur();
     void SupprimerArticle(Article*);
     Categorie(wxPanel*, wxString, Commande*);
     void EventAjouteArticle(wxCommandEvent& event);
