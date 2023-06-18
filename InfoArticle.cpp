@@ -1,15 +1,14 @@
 #include "InfoArticle.hpp"
 
 InfoArticle::InfoArticle(wxPanel* parent, const wxString nom) : wxDialog(parent, -1, nom, wxDefaultPosition, wxSize(500, 700)){
-    InitInfoArticle(parent, nom, _(""), 0.0, 0, 0, vector<bool>{false, false, false, false, false}, _(""));
-
+    InitInfoArticle(parent, nom, _(""), 0.0, 0.0, 0, 0, vector<bool>{false, false, false, false, false}, _(""));
 }
 
-InfoArticle::InfoArticle(wxPanel* parent, const wxString nom, wxString chemin, double prix, int stock, int rupture, vector<bool> caracteristique_presedente, wxString descriptif) : wxDialog(parent, -1, nom, wxDefaultPosition, wxSize(500, 700)){
-    InitInfoArticle(parent, nom, chemin, prix, stock, rupture, caracteristique_presedente, descriptif);
+InfoArticle::InfoArticle(wxPanel* parent, const wxString nom, wxString chemin, double prix, double prix_achat, int stock, int rupture, vector<bool> caracteristique_presedente, wxString descriptif) : wxDialog(parent, -1, nom, wxDefaultPosition, wxSize(500, 700)){
+    InitInfoArticle(parent, nom, chemin, prix, prix_achat, stock, rupture, caracteristique_presedente, descriptif);
 }
 
-void InfoArticle::InitInfoArticle(wxPanel* parent, const wxString nom, wxString chemin, double prix, int stock, int rupture, vector<bool> caracteristique_presedente, wxString descriptif){
+void InfoArticle::InitInfoArticle(wxPanel* parent, const wxString nom, wxString chemin, double prix,double prix_achat, int stock, int rupture, vector<bool> caracteristique_presedente, wxString descriptif){
     button_image = new wxButton(this, -1, "Image");
     text_chemin = new wxStaticText(this, -1, chemin);
 
@@ -21,6 +20,11 @@ void InfoArticle::InitInfoArticle(wxPanel* parent, const wxString nom, wxString 
     spin_prix = new wxSpinCtrlDouble(this, -1, wxEmptyString, wxDefaultPosition, wxSize(130,30), 16384L, 0.0, 100.0, prix, 0.01);
     sizer_prix->Add(new wxStaticText(this, -1, "Prix"), 1);
     sizer_prix->Add(spin_prix, 1);
+
+    sizer_prix_achat = new wxBoxSizer(wxVERTICAL);
+    spin_prix_achat = new wxSpinCtrlDouble(this, -1, wxEmptyString, wxDefaultPosition, wxSize(130,30), 16384L, 0.0, 100.0, prix_achat, 0.01);
+    sizer_prix_achat->Add(new wxStaticText(this, -1, "prix d'achat"), 1);
+    sizer_prix_achat->Add(spin_prix_achat, 1);
 
     sizer_stock = new wxBoxSizer(wxVERTICAL);
     spin_stock = new wxSpinCtrl(this, -1, wxEmptyString, wxDefaultPosition, wxSize(130,30), 16284L, 0, 1000, stock);
@@ -51,6 +55,7 @@ void InfoArticle::InitInfoArticle(wxPanel* parent, const wxString nom, wxString 
 
     sizer_premier->Add(sizer_chemin, 1);
     sizer_premier->Add(sizer_prix, 1);
+    sizer_premier->Add(sizer_prix_achat, 1);
     sizer_premier->Add(sizer_stock, 1);
     sizer_premier->Add(sizer_rupture, 1);
     sizer_premier->Add(sizer_caracteristique, 1);
@@ -105,7 +110,9 @@ int InfoArticle::GetStock(){
 double InfoArticle::GetPrix(){
     return spin_prix->GetValue();
 }
-
+double InfoArticle::GetPrixAchat(){
+    return spin_prix_achat->GetValue();
+}
 wxString InfoArticle::GetChemin(){
 
     wxFileInputStream input_stream(text_chemin->GetLabel());

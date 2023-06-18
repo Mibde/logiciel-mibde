@@ -19,6 +19,7 @@
 #include "Article.hpp"
 #include "InfoArticle.hpp"
 #include "Commande.hpp"
+#include "SnackAddSup.hpp"
 
 using namespace std;
 class Article;
@@ -26,6 +27,7 @@ class Commande;
 class Categorie : public wxStaticBoxSizer
 {
 private:
+    string nom;
     //la liste des aliment
     vector<Article*> liste_aliment;
 
@@ -40,11 +42,12 @@ private:
     wxPanel* panel_parent;
     Commande* commande;
 
+    void InitArtilce();
 public:
     void MoodAdmin();
     void MoodUtilisateur();
     void SupprimerArticle(Article*);
-    Categorie(wxPanel*, wxString, Commande*);
+    Categorie(wxPanel*, string, Commande*);
     void EventAjouteArticle(wxCommandEvent& event);
     wxString CheminsDeFicher();
 };

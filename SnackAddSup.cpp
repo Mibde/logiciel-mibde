@@ -4,27 +4,327 @@
 using namespace std;
 using namespace pqxx;
 
+string wxStringToString(const wxString& wxStr) {
+    return string(wxStr.ToStdString());
+}
+
 connection C("dbname = mibde user = postgres password = mibde \
 hostaddr = 127.0.0.1 port = 5432");
 
-void ChercheArticleBD(wxPanel* PanelParend, string NomArticle){
-    
+void updateSnackPrice(const string& nomSnack, double nouveauPrix) {
     try {
-      if (C.is_open()) {
-         
+
+        work txn(C);
+
+        string query = "UPDATE SNACK SET PRIX = $2 WHERE NOM_SNACK = $1";
+        txn.exec_params(query, nomSnack, nouveauPrix);
+
+        txn.commit();
+
+    } catch (const std::exception& e) {
+        cerr << "Une erreur s'est produite lors de la mise à jour du prix du snack : " << e.what() << endl;
+    }
+}
+
+void updateSnackStrock(const string& nomSnack, int newStock) {
+    try {
+
+        work txn(C);
+
+        string query = "UPDATE SNACK SET  quantite  = $2 WHERE NOM_SNACK = $1";
+        txn.exec_params(query, nomSnack, newStock);
+
+        txn.commit();
 
 
-      } else {
-         cout << "Can't open database" << endl;
-         return;
-      }
-      work demande{C};
-         string sql = "SELECT NOM_SNACK FROM SNACK WHERE NOM_SNACK = " + NomArticle;
-         
-        //for(auto[nom_snack, prix, benefice, description, quantite, en_vente, a_acheter, typea, chemin_vers_limage] : demande.query<string, float, float, string, int, int, int, string, string>(sql));
+    } catch (const std::exception& e) {
+        cerr << "Une erreur s'est produite lors de la mise à jour du prix du snack : " << e.what() << endl;
+    }
+}
+
+void updateTypeA(const string& nomSnack, const string& newTypeA) {
+    try {
+        // Établir une connexion à la base de données
+
+        connection C("dbname = mibde user = postgres password = mibde \
+                      hostaddr = 127.0.0.1 port = 5432");
+
+        // Préparer la requête SQL pour mettre à jour le typeA du snack donné
+        string query = "UPDATE SNACK SET TYPEA = $1 WHERE NOM_SNACK = $2";
+        work W(C);
+        W.exec_params(query, newTypeA, nomSnack);
+        W.commit();
+
+        cout << "Le typeA du snack a été mis à jour avec succès !" << endl;
+    } catch (const std::exception& e) {
+        cerr << "Une erreur s'est produite lors de la mise à jour du typeA : " << e.what() << endl;
+    }
+}
+
+
+bool verifyTypeA(const string& nomSnack, const string& typeA) {
+    try {
+        // Établir une connexion à la base de données
+
+        connection C("dbname = mibde user = postgres password = mibde \
+                      hostaddr = 127.0.0.1 port = 5432");
+
+        // Préparer la requête SQL pour vérifier le typeA du snack donné
+        string query = "SELECT COUNT(*) FROM SNACK WHERE NOM_SNACK = $1 AND TYPEA = $2";
+        nontransaction N(C);
+        result R(N.exec_params(query, nomSnack, typeA));
+
+        // Obtenir le résultat de la requête
+        int count = R[0][0].as<int>();
+
+        // Vérifier si le typeA correspond
+        return count > 0;
+    } catch (const exception& e) {
+        cerr << "Une erreur s'est produite lors de la vérification du typeA : " << e.what() << endl;
+        return false;
+    }
+}
+
+void replaceSnack(const string& nomSnack){
+    try {
+        work txn(C);
+
+        // Construction de la requête SQL de mise à jour
+        string sql = "UPDATE SNACK SET en_vente = 1 "
+                       "WHERE NOM_SNACK = $1";
+        result res = txn.exec_params(sql, nomSnack);
+
+        txn.commit();
+    } catch (const exception& e) {
+        wxLogError("Une erreur s'est produite lors de la remise du snack : '%s' ", e.what());
+    }
+}
+
+void deleteSnack(const string& nomSnack){
+    try {
+        work txn(C);
+
+        // Construction de la requête SQL de mise à jour
+        string sql = "UPDATE SNACK SET en_vente = -1 "
+                       "WHERE NOM_SNACK = $1";
+        result res = txn.exec_params(sql, nomSnack);
+
+        txn.commit();
+        cout << nomSnack << "passe a -1" << endl;
+    } catch (const exception& e) {
+        wxLogError("Une erreur s'est produite lors de la supresiont du snack : '%s' ", e.what());
+    }
+}
+
+void updateSnack(const string& nomSnack, float prix, float prixAchat, const string& description,
+                 int quantite, int rupture, const string& cheminVersImage) {
+    try {
+        work txn(C);
+
+        // Construction de la requête SQL de mise à jour
+        string sql = "UPDATE SNACK SET PRIX = $2, PRIX_ACHAT = $3, DESCRIPTION = $4, QUANTITE = $5, "
+                       "RUPTURE = $6, CHEMIN_VERS_LIMAGE = $7 "
+                       "WHERE NOM_SNACK = $1";
+        result res = txn.exec_params(sql, nomSnack, to_string(prix), to_string(prixAchat), description, to_string(quantite),
+                                     to_string(rupture), cheminVersImage);
+
+        txn.commit();
+    } catch (const exception& e) {
+        wxLogError("Une erreur s'est produite lors de la mise à jour des paramètres du snack : '%s' ", e.what());
+    }
+}
+
+
+void deleteSnackPeutContenir(const string& nomSnack) {
+    try {
+
+        work txn(C);
+
+        // Construction de la requête SQL pour supprimer les enregistrements
+        string sql = "DELETE FROM PEUT_CONTENIR WHERE NOM_SNACK = $1";
+
+        // Exécution de la requête
+        result res = txn.exec_params(sql, nomSnack);
+        txn.commit();
+    } catch (const exception& e) {
+        wxLogError("Une erreur s'est produite lors de la suppression des enregistrements de la table peut_contenir : '%s' ", e.what());
+    }
+}
+// Fonction pour récupérer un snack à partir de son nom
+unique_ptr<Snack> exiteSnack(const string& nomSnack) {
+    try {
+
+        nontransaction txn(C);
+
+        // Construction de la requête SQL
+        string sql = "SELECT * FROM SNACK WHERE NOM_SNACK = $1 and en_vente = -1";
+
+        // Exécution de la requête
+        result res = txn.exec_params(sql, nomSnack);
+
+        // Vérification si le résultat est vide
+        if (res.empty()) {
+            cerr << "Aucun snack trouvé avec le nom : " << nomSnack << endl;
+            return nullptr;
+        }
+
+        // Création d'un objet Snack
+        auto snack = make_unique<Snack>();
+        for (auto row : res) {
+            snack->nomSnack = row["NOM_SNACK"].as<string>();
+            snack->prix = row["PRIX"].as<float>();
+            snack->prixAchat = row["PRIX_ACHAT"].as<float>();
+            snack->description = row["DESCRIPTION"].as<string>();
+            snack->quantite = row["QUANTITE"].as<int>();
+            snack->enVente = row["EN_VENTE"].as<int>();
+            snack->rupture = row["RUPTURE"].as<int>();
+            snack->typeA = row["TYPEA"].as<string>();
+            snack->cheminVersImage = row["CHEMIN_VERS_LIMAGE"].as<string>();
+        }
+        return snack;
+    } catch (const exception& e) {
+        cerr << "Une erreur s'est produite lors de la récupération du snack : " << e.what() << endl;
+        return nullptr;
+    }
+}
+
+bool chercheSnack(const string& nomSnack){
+    try {
+
+        nontransaction txn(C);
+
         
-      C.disconnect();
-    } catch (const std::exception &e) {
-      cerr << e.what() << std::endl;
-   }
+        string sql = "SELECT * FROM SNACK WHERE nom_snack = $1";
+        result res = txn.exec_params(sql, nomSnack);
+        if(res.empty())
+            return false;
+        return true;
+
+    } catch (const exception& e) {
+        wxLogError("Une erreur s'est produite lors de la recherche de snack : '%s' ", e.what());
+        return true;
+    }
+}
+
+
+void addAttributesToSnack(const string& nomSnack, const vector<bool>& attributes) {
+    try {
+
+        work txn(C);
+
+        // Vérification de la taille de la liste d'attributs
+        if (attributes.size() != 5) {
+            cerr << "La liste d'attributs doit contenir exactement 5 éléments." << endl;
+            return;
+        }
+
+        // Construction de la requête SQL
+        string sql = "INSERT INTO PEUT_CONTENIR (CATEGORIE, NOM_SNACK) VALUES ";
+
+        if (attributes[0])
+            sql += "('halal', $1), ";
+        if (attributes[1])
+            sql += "('casher', $1), ";
+        if (attributes[2])
+            sql += "('vegan', $1), ";
+        if (attributes[3])
+            sql += "('vegetarien', $1), ";
+        if (attributes[4])
+            sql += "('recyclabe', $1), ";
+        
+        // Suppression de la virgule finale
+        sql = sql.substr(0, sql.length() - 2);
+        // Exécution de la requête
+        result res = txn.exec_params(sql, nomSnack);
+        txn.commit();
+
+    } catch (const exception& e) {
+        wxLogError("Une erreur s'est produite lors de l'ajout des attributs pour le snack : '%s' ", e.what());
+    }
+}
+
+
+vector<bool> checkArticleComposition(const string& articleType) {
+    vector<bool> composition;
+
+    try {
+
+        nontransaction txn(C);
+
+        // Construction de la requête SQL
+        string sql = "SELECT "
+                     "CASE WHEN EXISTS(SELECT * FROM PEUT_CONTENIR WHERE CATEGORIE = 'halal' AND NOM_SNACK = $1) THEN true ELSE false END AS is_halal, "
+                     "CASE WHEN EXISTS(SELECT * FROM PEUT_CONTENIR WHERE CATEGORIE = 'casher' AND NOM_SNACK = $1) THEN true ELSE false END AS is_casher, "
+                     "CASE WHEN EXISTS(SELECT * FROM PEUT_CONTENIR WHERE CATEGORIE = 'vegan' AND NOM_SNACK = $1) THEN true ELSE false END AS is_vegan, "
+                     "CASE WHEN EXISTS(SELECT * FROM PEUT_CONTENIR WHERE CATEGORIE = 'vegetarien' AND NOM_SNACK = $1) THEN true ELSE false END AS is_vegetarien, "
+                     "CASE WHEN EXISTS(SELECT * FROM PEUT_CONTENIR WHERE CATEGORIE = 'recyclabe' AND NOM_SNACK = $1) THEN true ELSE false END AS is_recyclable";
+
+        // Exécution de la requête avec le paramètre
+        result res = txn.exec_params(sql, articleType);
+
+        // Récupération des résultats
+        if (res.size() > 0) {
+            auto row = res.front();
+            composition.push_back(row["is_halal"].as<bool>());
+            composition.push_back(row["is_casher"].as<bool>());
+            composition.push_back(row["is_vegan"].as<bool>());
+            composition.push_back(row["is_vegetarien"].as<bool>());
+            composition.push_back(row["is_recyclable"].as<bool>());
+        }
+    } catch (const exception& e) {
+        wxLogError("Une erreur s'est produite lors de la vérification de la composition de l'article : '%s' ", e.what());
+    }
+
+    return composition;
+}
+
+vector<Snack> getSnacks(string categorie) {
+    vector<Snack> snacks;
+
+    try {
+
+        nontransaction txn(C);
+
+        // Construction de la requête SQL
+        string sql = "SELECT NOM_SNACK, PRIX, PRIX_ACHAT, DESCRIPTION, QUANTITE, EN_VENTE, RUPTURE, TYPEA, CHEMIN_VERS_LIMAGE "
+                     "FROM SNACK WHERE TYPEA = $1 AND EN_VENTE = $2";
+
+        // Exécution de la requête avec les paramètres
+        result res = txn.exec_params(sql, categorie, 1);
+
+        // Parcours des résultats et construction de la liste de snacks
+        for (auto row : res) {
+            Snack snack;
+            snack.nomSnack = row["NOM_SNACK"].as<string>();
+            snack.prix = row["PRIX"].as<float>();
+            snack.prixAchat = row["PRIX_ACHAT"].as<float>();
+            snack.description = row["DESCRIPTION"].as<string>();
+            snack.quantite = row["QUANTITE"].as<int>();
+            snack.enVente = row["EN_VENTE"].as<int>();
+            snack.rupture = row["RUPTURE"].as<int>();
+            snack.typeA = row["TYPEA"].as<string>();
+            snack.cheminVersImage = row["CHEMIN_VERS_LIMAGE"].as<string>();
+            snacks.push_back(snack);
+        }
+    } catch (const exception& e) {
+        wxLogError("Une erreur s'est produite lors de la récupération des snacks : '%s'", e.what());
+    }
+
+    return snacks;
+}
+
+void createSnack(const string& nomSnack, float prix, float prixAchat, const string& description,
+                 int quantite, int enVente, int rupture, const string& typeA, const string& cheminVersImage) {
+    try {
+        work txn(C);
+
+        string sql = "INSERT INTO SNACK (NOM_SNACK, PRIX, PRIX_ACHAT, DESCRIPTION, QUANTITE, EN_VENTE, RUPTURE, TYPEA, CHEMIN_VERS_LIMAGE) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)";
+        result res = txn.exec_params(sql, nomSnack, to_string(prix), to_string(prixAchat), description, to_string(quantite),
+                                     to_string(enVente), to_string(rupture), typeA, cheminVersImage);
+        // Exécution de la requête directe
+        txn.commit();
+
+    } catch (const exception& e) {
+        wxLogError("Une erreur s'est produite lors de la création du snack : '%s'", wxString(e.what()));
+    }
 }

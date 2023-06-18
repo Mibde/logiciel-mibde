@@ -17,7 +17,7 @@
 #include<iomanip>
 #include <fstream>
 #include "Commande.hpp"
-
+#include "SnackAddSup.hpp"
 #include "Categorie.hpp"
 #include "Membre.hpp"
 #define ID_MOOD_ADMIN (wxID_HIGHEST + 1)

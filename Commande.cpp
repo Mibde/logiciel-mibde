@@ -127,17 +127,28 @@ void Commande::Anulation(){
 
 void Commande::ClearCammande(){
     for (auto it = commandes.begin(); it != commandes.end(); ++it)
-        DestroyProduit(it->second);
+    {
+        // Suppression de l'élément du sizer
+        sizer_commandes->Detach(it->second);
+            
+        // Suppression de l'élément de la map
+        Produit* tmp = it->second;
+        commandes.erase(it);
+            
+        // Destruction de l'objet produit
+        tmp->Destroy();
+
+    }
+
+    sizer_commandes->Layout();
 }
 
 void Commande::SupprimerProduit(Produit* produit) 
 {
-
+    AugmentArticle(produit);
     if (produit->GetNbProduit() > 1){
-        AugmentArticle(produit);
         produit->SupProduit();
     }else{
-        AugmentArticle(produit);
         DestroyProduit(produit);
     }
     ReffrechMonnaieARendre();

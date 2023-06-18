@@ -29,10 +29,10 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     //les commande des client
     commande = new Commande(panelAffichage);
     //les categorie darticle proposer
-    static_boison = new Categorie(panelAffichage, "Boison : ", commande);
-    static_snack = new Categorie(panelAffichage, "Snack : ", commande);
-    static_nouie = new Categorie(panelAffichage, "Nouie : ", commande);
-    static_diver = new Categorie(panelAffichage, "Diver : ", commande);
+    static_boison = new Categorie(panelAffichage, "boisson", commande);
+    static_snack = new Categorie(panelAffichage, "snack", commande);
+    static_nouie = new Categorie(panelAffichage, "nouille", commande);
+    static_diver = new Categorie(panelAffichage, "autre", commande);
 
     //la line
     wxStaticLine* ligneHoriz = new wxStaticLine(panelAffichage, -1);
@@ -57,7 +57,6 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     // vendre a une persone
     sizer_init->Add(sizer_comende, 4, wxALL | wxEXPAND, 0);
     panelAffichage->SetSizer(sizer_init);
-    
     this->Bind(wxEVT_MENU, [this](wxCommandEvent & evt)->void{ OnAdmin(); }, ID_MOOD_ADMIN);
     this->Bind(wxEVT_MENU, [this](wxCommandEvent & evt)->void{OnUtilisateur();}, ID_MOOD_UTILISATEUR);
     this->Bind(wxEVT_MENU, [this](wxCommandEvent & evt)->void{OnExit();}, wxID_EXIT);

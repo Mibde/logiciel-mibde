@@ -13,6 +13,7 @@
 #include "Categorie.hpp"
 #include "InfoArticle.hpp"
 #include "Commande.hpp"
+#include "SnackAddSup.hpp"
 using namespace std;
 class Categorie;
 class Article : public wxPanel {
@@ -43,12 +44,18 @@ private:
 	wxString nom;
 
 	double prix;
+	double prix_achat;
 
 	int nb_article;
 
 	wxPanel* rupture_panel;
 	wxStaticBitmap* rupture_Bitmap;
+	wxBitmap* ruptrue_icon_rouge;
+	wxBitmap* ruptrue_icon_vert;
+
+
 	int rupture;
+	bool is_rupture;
 	vector<bool> caracteristique;
 	wxString descriptif;
 
@@ -72,10 +79,15 @@ public:
 	void AnuleProduit();
 	wxString GetNom();
 	double GetPrix();
+	double GetPrixAchat();
 	void EventParame(wxCommandEvent& event);
 	void EventInfo(wxCommandEvent& event);
 	void EventVenteProduit(wxCommandEvent& event);
-	Article(wxPanel*, Categorie*, wxString, wxString, double, int, int, vector<bool>, wxString, Commande*);
+	void EventModifiePrix(wxCommandEvent& event);
+	void EventModifieArticle(wxCommandEvent& event);
+	Article(wxPanel*, Categorie*, wxString, wxString, double, double, int, int, vector<bool>, wxString, Commande*);
+
+	
 };
 
 #endif // ARTICLE_H_INCLUDED

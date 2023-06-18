@@ -21,6 +21,7 @@ private:
     wxBoxSizer* sizer_premier;
     wxBoxSizer* sizer_chemin;
     wxBoxSizer* sizer_prix;
+    wxBoxSizer* sizer_prix_achat;
     wxBoxSizer* sizer_stock;
     wxBoxSizer* sizer_rupture;
     wxBoxSizer* sizer_caracteristique;
@@ -30,6 +31,7 @@ private:
     wxStaticText* text_chemin;
 
     wxSpinCtrlDouble* spin_prix;
+    wxSpinCtrlDouble* spin_prix_achat;
     wxSpinCtrl* spin_stock;
     wxSpinCtrl* spin_rupture; 
 
@@ -44,10 +46,12 @@ public:
     int GetRupture();
     int GetStock();
     double GetPrix();
+    double GetPrixAchat();
+
     wxString GetChemin();
-    void InitInfoArticle(wxPanel*, const wxString, wxString, double, int, int, vector<bool>, wxString);
+    void InitInfoArticle(wxPanel*, const wxString, wxString, double, double, int, int, vector<bool>, wxString);
     InfoArticle(wxPanel*, const wxString);
-    InfoArticle(wxPanel*, const wxString, wxString, double, int, int, vector<bool>, wxString);
+    InfoArticle(wxPanel*, const wxString, wxString, double, double, int, int, vector<bool>, wxString);
 };
 
 

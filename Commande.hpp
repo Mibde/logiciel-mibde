@@ -8,6 +8,7 @@
 #include <map>
 #include "Article.hpp"
 #include "Produit.hpp"
+#include "SnackAddSup.hpp"
 using namespace std;
 class Produit;
 class Article;

@@ -1,22 +1,27 @@
 #include "Article.hpp"
 
-Article::Article(wxPanel* panel_parent, Categorie* categorie, wxString nom, wxString chemins_image, double prix, int nb_article, int rupture, vector<bool> caracteristique, wxString descriptif, Commande* commande) : wxPanel(panel_parent, wxID_ANY), categorie(categorie), commande(commande) {
+Article::Article(wxPanel* panel_parent, Categorie* categorie, wxString nom, wxString chemins_image, double prix, double prix_achat, int nb_article, int rupture, vector<bool> caracteristique, wxString descriptif, Commande* commande) : wxPanel(panel_parent, wxID_ANY), categorie(categorie), commande(commande), nom(nom){
 	//initialisations des widget
 	this->panel_parent = panel_parent;
 	this->prix = prix;
+	this->prix_achat = prix_achat;
 	this->nb_article = nb_article;
 	this->rupture = rupture;
 	this->caracteristique = caracteristique;
 	this->descriptif = descriptif;
 	chemins_ime = chemins_image;
-	this->nom = nom;
+	is_rupture = nb_article<= rupture;
 	InitImageArticle();
 	//apelle des widget
 	AddArticle();
-	btn_sup_article->Bind(wxEVT_BUTTON, [this, categorie](wxCommandEvent& event) { categorie->SupprimerArticle(this); });
+	btn_sup_article->Bind(wxEVT_BUTTON, [this, categorie](wxCommandEvent& event) { categorie->SupprimerArticle(this);});
 	btn_parame->Bind(wxEVT_BUTTON, &Article::EventParame, this);
 	btn_info->Bind(wxEVT_BUTTON, &Article::EventInfo, this);
 	btn_validation->Bind(wxEVT_BUTTON, &Article::EventVenteProduit, this);
+	prix_article->Bind(wxEVT_SPINCTRLDOUBLE, &Article::EventModifiePrix, this);
+	article->Bind(wxEVT_SPINCTRL, &Article::EventModifieArticle, this);
+
+
 }
 void Article::AddArticle() {
 	sizer_article->Add(panel_imag_article, 0);
@@ -101,8 +106,14 @@ void Article::InitIcon(string chemin_icon){
 }
 void Article::RuptureIcone(){
 	rupture_panel = new wxPanel(this, -1);
-	wxBitmap ruptrue_icon("icon/rouge.jpg", wxBITMAP_TYPE_JPEG_RESOURCE);
-	rupture_Bitmap = new wxStaticBitmap(rupture_panel, wxID_ANY, ruptrue_icon);
+	ruptrue_icon_rouge = new wxBitmap("icon/rouge.jpg", wxBITMAP_TYPE_JPEG_RESOURCE);
+	ruptrue_icon_vert = new wxBitmap("icon/vert.png", wxBITMAP_TYPE_PNG);
+	if(is_rupture){
+		rupture_Bitmap = new wxStaticBitmap(rupture_panel, wxID_ANY, *ruptrue_icon_rouge);
+	}else{
+		rupture_Bitmap = new wxStaticBitmap(rupture_panel, wxID_ANY, *ruptrue_icon_vert);	
+	}
+
 }
 void Article::InitSupArticle(){
 	wxBitmap sup_bitmap("icon/moin.png", wxBITMAP_TYPE_PNG);
@@ -144,7 +155,7 @@ void Article::chargeIcon(){
 
 
 void Article::EventParame(wxCommandEvent& event){
-	InfoArticle dialo(panel_parent, nom, chemins_ime, prix, nb_article, rupture, caracteristique, descriptif);
+	InfoArticle dialo(panel_parent, nom, chemins_ime, prix, prix_achat, nb_article, rupture, caracteristique, descriptif);
         if (dialo.ShowModal() == wxID_OK)
         {
             descriptif = dialo.GetDescriptif();
@@ -153,6 +164,7 @@ void Article::EventParame(wxCommandEvent& event){
             nb_article = dialo.GetStock();
 			
             prix = dialo.GetPrix();
+			prix_achat = dialo.GetPrixAchat();
 			if ((dialo.GetChemin() != ""))
             	chemins_ime = dialo.GetChemin();
 			wxBitmap bitmap_icon(chemins_ime, wxBITMAP_TYPE_PNG);
@@ -163,9 +175,12 @@ void Article::EventParame(wxCommandEvent& event){
 			article->SetValue(nb_article);
 			
 			chargeIcon();
-			
+			deleteSnackPeutContenir(wxStringToString(nom));
+			addAttributesToSnack(wxStringToString(nom), caracteristique);
+			updateSnack(wxStringToString(nom), prix, prix_achat, wxStringToString(descriptif), nb_article, rupture, wxStringToString(chemins_ime));
+			this->Layout();
         }
-		this->Layout();
+		
 }
 
 
@@ -193,13 +208,22 @@ wxString Article::GetNom(){
 double Article::GetPrix(){
 	return prix;
 }
-
+double Article::GetPrixAchat(){
+	return prix_achat;
+}
 void Article::AnulationsVente(){
 	article->SetValue(nb_article);
 }
 
 void Article::ConfirmeVente(){
 	nb_article = article->GetValue();
+	is_rupture = nb_article <= rupture;
+	if(is_rupture){
+		rupture_Bitmap->SetBitmap(*ruptrue_icon_rouge);
+	}else{
+		rupture_Bitmap->SetBitmap(*ruptrue_icon_vert);	
+	}
+	updateSnackStrock(wxStringToString(nom), nb_article);
 }
 void Article::MoodAdmin(){
 	btn_validation->Enable(false);
@@ -215,3 +239,14 @@ void Article::MoodUtilisateur(){
 	btn_parame->Enable(false);
 	btn_validation->Enable(true);
 }
+
+void Article::EventModifiePrix(wxCommandEvent& event){
+	prix = prix_article->GetValue();
+	updateSnackPrice(wxStringToString(nom), prix);
+}
+
+void Article::EventModifieArticle(wxCommandEvent& event){
+	ConfirmeVente();
+}
+
+

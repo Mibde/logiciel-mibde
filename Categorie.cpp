@@ -1,9 +1,8 @@
 #include "Categorie.hpp"
 
 
-Categorie::Categorie(wxPanel* panel_parent, wxString nom, Commande* commande) : wxStaticBoxSizer(wxVERTICAL, panel_parent, nom), commande(commande), panel_parent(panel_parent)
+Categorie::Categorie(wxPanel* panel_parent, string nom, Commande* commande) : wxStaticBoxSizer(wxVERTICAL, panel_parent, wxString(nom+" : ")), commande(commande), panel_parent(panel_parent), nom(nom)
 {
-
     scrole_categorie = new wxScrolledWindow(panel_parent);
 
     sizer_categorie = new wxBoxSizer(wxVERTICAL);
@@ -26,30 +25,60 @@ Categorie::Categorie(wxPanel* panel_parent, wxString nom, Commande* commande) : 
     this->Add(scrole_categorie, 10, wxALL | wxEXPAND, 0);
     
     this->Add(sizer_categorie_button, 1, wxEXPAND, 0);
-
+    InitArtilce();
     ajoute_article->Bind(wxEVT_BUTTON, &Categorie::EventAjouteArticle, this);
     
 }
 
+void Categorie::InitArtilce(){
+    vector<Snack> snacks = getSnacks(nom);
+    for(Snack s : snacks){
+        Article* tmp;
+        vector<bool> list_caracterisitque =  checkArticleComposition(s.nomSnack);
 
+        if(tmp = new Article(scrole_categorie, this, s.nomSnack, s.cheminVersImage, s.prix, s.prixAchat, s.quantite, s.rupture, list_caracterisitque, s.description, commande))
+        {
+            liste_aliment.push_back(tmp);
+                    
+            sizer_categorie->Add(tmp, 0, wxALL | wxEXPAND, 0);
+            panel_parent->Layout();
+        }
+    }
+}
 
 void Categorie::EventAjouteArticle(wxCommandEvent& event) {
     //wxInitAllImageHandlers();
     wxTextEntryDialog name_is(panel_parent, wxT("Le nom de l'article (sans acens)"), wxT("Ajouter un article"));
     name_is.SetTextValidator(wxFILTER_ALPHA);
-    wxString nom;
+    string nom_snack;
 
-    if (name_is.ShowModal() == wxID_OK && ((nom = name_is.GetValue()) != ""))
+    if (name_is.ShowModal() == wxID_OK && ((nom_snack = name_is.GetValue()) != ""))
     {
-        wxString descriptif;
+        bool init = false;
+        string descriptif;
         vector<bool> caracteristique;
         int rupture;
         int stock;
         double prix;
-        wxString chemin;
+        double prix_achat;
+        string chemin;
         int res;
-        if(true){
-            InfoArticle dialo(panel_parent, nom);
+        
+        if(unique_ptr<Snack> s = exiteSnack(nom_snack)){
+            //cout << "la il y a le chemin : " << s->cheminVersImage << endl;
+            descriptif = s->description;
+            caracteristique = checkArticleComposition(nom_snack);
+            rupture = s->rupture;
+            stock = s->quantite;
+            prix = s->prix;
+            chemin = s->cheminVersImage;
+            init = true;
+            replaceSnack(nom_snack);
+            if(!verifyTypeA(nom_snack, nom)){
+                updateTypeA(nom_snack, nom);
+            }
+        }else if(!chercheSnack(nom_snack)){
+            InfoArticle dialo(panel_parent, nom_snack);
             res = dialo.ShowModal();
             if (res == wxID_OK)
             {
@@ -58,14 +87,19 @@ void Categorie::EventAjouteArticle(wxCommandEvent& event) {
                 rupture = dialo.GetRupture();
                 stock = dialo.GetStock();
                 prix = dialo.GetPrix();
+                prix_achat = dialo.GetPrixAchat();
                 chemin = dialo.GetChemin();
+                createSnack(nom_snack, prix, prix_achat, descriptif, stock, 1, rupture, nom, chemin);
+                addAttributesToSnack(nom_snack, caracteristique);
+                init = true;
             }
-            //if( res == wxID_CANCEL){cout << "nonnnn" << endl;}
         }
-
+        
+        
         Article* tmp;
-        if(res != wxID_CANCEL &&(tmp = new Article(scrole_categorie, this, nom, chemin, prix, stock, rupture, caracteristique, descriptif, commande)))
+        if(init && res != wxID_CANCEL &&(tmp = new Article(scrole_categorie, this, nom_snack, chemin, prix, prix_achat, stock, rupture, caracteristique, descriptif, commande)))
         {
+            
             liste_aliment.push_back(tmp);
                     
             sizer_categorie->Add(tmp, 0, wxALL | wxEXPAND, 0);
@@ -108,11 +142,13 @@ void Categorie::SupprimerArticle(Article* article) {
             if (it != liste_aliment.end()) {
                 liste_aliment.erase(it);
             }
+            deleteSnack(wxStringToString(article->GetNom()));
             // Destruction de l'objet article
             article->Destroy();
             break;
         }
     }
+   
     sizer_categorie->Layout();
 }
 
@@ -128,3 +164,4 @@ void Categorie::MoodUtilisateur(){
         art->MoodUtilisateur();
     }
 }
+
