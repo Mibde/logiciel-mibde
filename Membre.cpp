@@ -14,20 +14,18 @@ Membre::Membre(wxPanel* panel_parent) : wxStaticBoxSizer(wxVERTICAL, panel_paren
     scrole_membres->SetSizer(sizer_membres);
     this->Add(scrole_membres, 1, wxALL | wxEXPAND, 0);
     this->Add(sizer_membres_button, 0, wxEXPAND, 0);
-
+    InitPersonnes();
     ajoute_personne->Bind(wxEVT_BUTTON, &Membre::NewMembre, this);
+
 }
+void Membre::InitPersonnes(){
+    vector<personne> personnes = getPersonnes();
 
-void Membre::NewMembre(wxCommandEvent& event)
-{
-    wxTextEntryDialog name_is(this->panel_parent, wxT("Le Nom Prenom du nouvaus menbre (sans acens)"), wxT("Ajouter un membre"));
-    wxString nom;
-
-    if (name_is.ShowModal() == wxID_OK && ((nom = name_is.GetValue()) != ""))
-    {
-        Personne* new_personne;
-        if ((new_personne = new Personne(scrole_membres, this, nom)))
-        {   
+    Personne* new_personne;
+    
+    for(personne p : personnes){
+        
+        if(new_personne = new Personne(scrole_membres, this, p.nom, p.prenom)){
             membres.push_back(new_personne);
             sizer_membres->Add(new_personne, 0, wxALL | wxEXPAND, 0);
             sizer_membres->Layout();
@@ -35,12 +33,37 @@ void Membre::NewMembre(wxCommandEvent& event)
             scrole_membres->SetVirtualSize(sizer_membres->GetSize());
             scrole_membres->SetScrollRate(5, 5);
         }
-        else
-        {
-            wxLogError("Une ereur et survenus au moment de l'ajous de la person");
-        }
     }
-    name_is.Destroy();
+}
+void Membre::NewMembre(wxCommandEvent& event)
+{
+    wxTextEntryDialog nom_is(this->panel_parent, wxT("Le Nom du nouvaus menbre"), wxT("Ajouter un membre"));
+    wxTextEntryDialog prenom_is(this->panel_parent, wxT("Le Prenom du nouvaus menbre"), wxT("Ajouter un membre"));
+    string nom;
+    string prenom;
+
+    if (nom_is.ShowModal() == wxID_OK && ((nom = wxStringToString(nom_is.GetValue())) != "") && prenom_is.ShowModal() == wxID_OK && ((prenom = wxStringToString(prenom_is.GetValue())) != ""))
+    {
+        Personne* new_personne;
+        if (nomInactif(nom, prenom) && (new_personne = new Personne(scrole_membres, this, nom, prenom)))
+        {   
+            membres.push_back(new_personne);
+            sizer_membres->Add(new_personne, 0, wxALL | wxEXPAND, 0);
+            sizer_membres->Layout();
+            scrole_membres->FitInside();
+            scrole_membres->SetVirtualSize(sizer_membres->GetSize());
+            scrole_membres->SetScrollRate(5, 5);
+            if(estInactif(nom, prenom))
+                ActiverPersonne(nom, prenom);
+
+            if (notExitePersonne(nom, prenom))
+                enregistrerPersonne(nom, prenom);
+
+        }
+
+    }
+    nom_is.Destroy();
+    prenom_is.Destroy();
 }
 
 void Membre::SupprimerPersonne(Personne* personne) {
@@ -76,4 +99,14 @@ void Membre::MoodUtilisateur(){
     for(Personne* art : membres){
         art->MoodUtilisateur();
     }
+}
+
+vector<pair<string, string>> Membre::GetListPersonne(){
+    vector<pair<string, string>> vendeurs;
+    for(Personne* p : membres){
+        if(p->Check()){
+            vendeurs.push_back(p->GetNom());
+        }
+    }
+    return vendeurs;
 }

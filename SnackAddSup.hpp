@@ -6,7 +6,12 @@
 #include <string>
 #include <wx/wx.h>
 #include <vector>
+#include <map>
+#include <utility>
 #include "Article.hpp"
+#include "Produit.hpp"
+using namespace std;
+using namespace pqxx;
 
 struct Snack {
     string nomSnack;
@@ -18,6 +23,11 @@ struct Snack {
     int rupture;
     string typeA;
     string cheminVersImage;
+};
+
+struct personne{
+    string nom;
+    string prenom;
 };
 
 string wxStringToString(const wxString& wxStr) ;
@@ -38,5 +48,17 @@ bool verifyTypeA(const string& nomSnack, const string& typeA) ;
 void updateTypeA(const string& nomSnack, const string& newTypeA) ;
 void updateSnackStrock(const string& nomSnack, int newStock);
 void updateSnackPrice(const string& nomSnack, double nouveauPrix);
+
+void enregistrerPersonne(const string& nom, const string& prenom);
+void desactiverPersonne(const string& nom, const string& prenom);
+
+bool estInactif(const string& nom, const string& prenom) ;
+bool notExitePersonne(const string& nom, const string& prenom);
+bool nomInactif(const string& nom, const string& prenom);
+void ActiverPersonne(const string& nom, const string& prenom);
+vector<personne> getPersonnes();
+
+
+
 
 #endif

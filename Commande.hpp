@@ -6,17 +6,23 @@
 #include <vector>
 #include <iostream>
 #include <map>
+#include <utility>
+#include <pqxx/pqxx> 
 #include "Article.hpp"
 #include "Produit.hpp"
 #include "SnackAddSup.hpp"
+#include "Membre.hpp"
 using namespace std;
+using namespace pqxx;
 class Produit;
 class Article;
+class Membre;
+
 class Commande : public wxBoxSizer
 {
 public:
     void AugmentArticle(Produit*);
-    Commande(wxPanel* panel_parent);
+    Commande(wxPanel*, Membre*);
     void SupprimerProduit(Produit* produit);
     void DestroyProduit(Produit* produit);
     map<Article*, Produit*> commandes;
@@ -25,7 +31,7 @@ public:
     void MoodAdmin();
 
 private:
-    
+    Membre* membre;    
 
     wxPanel* panel_parent;
 
@@ -56,6 +62,7 @@ private:
     void ClearCammande();
     void Anulation();
     void Validation();
+    void AjouterVente();
     void EventAnulationCommande(wxCommandEvent& event);
     void EventValidationCommande(wxCommandEvent& event);
 };

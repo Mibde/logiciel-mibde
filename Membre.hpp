@@ -4,7 +4,9 @@
 #include <wx/wx.h>
 #include <vector>
 #include <iostream>
+#include <utility>
 #include "Personne.hpp"
+#include "SnackAddSup.hpp"
 using namespace std;
 class Personne;
 class Membre : public wxStaticBoxSizer
@@ -15,10 +17,11 @@ public:
     vector<Personne*> membres;
     void MoodAdmin();
     void MoodUtilisateur();
+    vector<pair<string, string>> GetListPersonne();
 
 private:
     void NewMembre(wxCommandEvent& event);
-
+    void InitPersonnes();
     wxPanel* panel_parent;
     wxPanel* panel_membres;
     wxScrolledWindow* scrole_membres;

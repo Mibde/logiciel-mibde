@@ -1,14 +1,14 @@
 #include <pqxx/pqxx>
 #include "SnackAddSup.hpp"
 
-using namespace std;
-using namespace pqxx;
+
+
 
 string wxStringToString(const wxString& wxStr) {
     return string(wxStr.ToStdString());
 }
 
-connection C("dbname = mibde user = postgres password = mibde \
+extern connection C("dbname = mibde user = postgres password = mibde \
 hostaddr = 127.0.0.1 port = 5432");
 
 void updateSnackPrice(const string& nomSnack, double nouveauPrix) {
@@ -21,7 +21,7 @@ void updateSnackPrice(const string& nomSnack, double nouveauPrix) {
 
         txn.commit();
 
-    } catch (const std::exception& e) {
+    } catch (const exception& e) {
         cerr << "Une erreur s'est produite lors de la mise à jour du prix du snack : " << e.what() << endl;
     }
 }
@@ -37,7 +37,7 @@ void updateSnackStrock(const string& nomSnack, int newStock) {
         txn.commit();
 
 
-    } catch (const std::exception& e) {
+    } catch (const exception& e) {
         cerr << "Une erreur s'est produite lors de la mise à jour du prix du snack : " << e.what() << endl;
     }
 }
@@ -56,7 +56,7 @@ void updateTypeA(const string& nomSnack, const string& newTypeA) {
         W.commit();
 
         cout << "Le typeA du snack a été mis à jour avec succès !" << endl;
-    } catch (const std::exception& e) {
+    } catch (const exception& e) {
         cerr << "Une erreur s'est produite lors de la mise à jour du typeA : " << e.what() << endl;
     }
 }
@@ -328,3 +328,142 @@ void createSnack(const string& nomSnack, float prix, float prixAchat, const stri
         wxLogError("Une erreur s'est produite lors de la création du snack : '%s'", wxString(e.what()));
     }
 }
+
+
+void enregistrerPersonne(const string& nom, const string& prenom) {
+    try {
+
+        work txn(C);
+
+        string sql = "INSERT INTO PERSONNE (NOM, PRENOM) VALUES ($1, $2)";
+        result res = txn.exec_params(sql, nom, prenom);
+
+        txn.commit();
+
+        cout << "La personne a été enregistrée avec succès !" << endl;
+    } catch (const exception& e) {
+        cerr << "Une erreur s'est produite lors de l'enregistrement de la personne : " << e.what() << endl;
+    }
+}
+
+void desactiverPersonne(const string& nom, const string& prenom) {
+    try {
+
+        work txn(C);
+
+        string sql = "UPDATE PERSONNE SET ACTIF = -1 WHERE NOM = $1 AND PRENOM = $2";
+        result res = txn.exec_params(sql, nom, prenom);
+
+        txn.commit();
+
+        cout << "La personne a été désactivée avec succès !" << endl;
+    } catch (const exception& e) {
+        cerr << "Une erreur s'est produite lors de la désactivation de la personne : " << e.what() << endl;
+    }
+}
+
+void ActiverPersonne(const string& nom, const string& prenom) {
+    try {
+
+        work txn(C);
+
+        string sql = "UPDATE PERSONNE SET ACTIF = 1 WHERE NOM = $1 AND PRENOM = $2";
+        result res = txn.exec_params(sql, nom, prenom);
+
+        txn.commit();
+
+        cout << "La personne a été désactivée avec succès !" << endl;
+    } catch (const exception& e) {
+        cerr << "Une erreur s'est produite lors de la désactivation de la personne : " << e.what() << endl;
+    }
+}
+
+bool estInactif(const string& nom, const string& prenom) {
+    try {
+        nontransaction txn(C);
+
+        string sql = "SELECT ACTIF FROM PERSONNE WHERE NOM = $1 AND PRENOM = $2";
+        result res = txn.exec_params(sql, nom, prenom);
+
+        if (res.empty()) {
+            // La personne n'a pas été trouvée dans la base de données
+            cout << "La personne n'existe pas dans la base de données." << endl;
+            return false;
+        }
+
+        int actif = res[0][0].as<int>();
+
+        return (actif == -1);
+    } catch (const exception& e) {
+        cerr << "Une erreur s'est produite lors de la vérification de l'état actif de la personne : " << e.what() << endl;
+        return false;
+    }
+}
+
+bool nomInactif(const string& nom, const string& prenom) {
+    try {
+        nontransaction txn(C);
+
+        string sql = "SELECT ACTIF FROM PERSONNE WHERE NOM = $1 AND PRENOM = $2";
+        result res = txn.exec_params(sql, nom, prenom);
+
+        if (res.empty()) {
+            // La personne n'a pas été trouvée dans la base de données
+            cout << "La personne n'existe pas dans la base de données." << endl;
+            return true;
+        }
+
+        int actif = res[0][0].as<int>();
+
+        return (actif == -1);
+    } catch (const exception& e) {
+        cerr << "Une erreur s'est produite lors de la vérification de l'état actif de la personne : " << e.what() << endl;
+        return false;
+    }
+}
+
+bool notExitePersonne(const string& nom, const string& prenom) {
+    try {
+        nontransaction txn(C);
+
+        string sql = "SELECT ACTIF FROM PERSONNE WHERE NOM = $1 AND PRENOM = $2";
+        result res = txn.exec_params(sql, nom, prenom);
+
+        return res.empty();
+
+    } catch (const exception& e) {
+        cerr << "Une erreur s'est produite lors de la vérification de l'état actif de la personne : " << e.what() << endl;
+        return false;
+    }
+}
+
+
+vector<personne> getPersonnes() {
+    vector<personne> personnes;
+
+    try {
+
+        nontransaction txn(C);
+
+        // Construction de la requête SQL
+        string sql = "SELECT NOM, PRENOM FROM PERSONNE WHERE ACTIF = 1";
+
+        // Exécution de la requête
+        result res = txn.exec(sql);
+
+        // Parcours des résultats et construction de la liste de snacks
+        for (auto row : res) {
+            personne p;
+            p.nom = row["NOM"].as<string>();
+            p.prenom = row["PRENOM"].as<string>();
+            personnes.push_back(p);
+        }
+    } catch (const exception& e) {
+        wxLogError("Une erreur s'est produite lors de la récupération des snacks : '%s'", e.what());
+    }
+
+    return personnes;
+}
+
+
+

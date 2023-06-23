@@ -27,7 +27,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     sizer_comende = new wxBoxSizer(wxHORIZONTAL);
     //les static box
     //les commande des client
-    commande = new Commande(panelAffichage);
+    membres = new Membre(panelAffichage);
+    commande = new Commande(panelAffichage, membres);
     //les categorie darticle proposer
     static_boison = new Categorie(panelAffichage, "boisson", commande);
     static_snack = new Categorie(panelAffichage, "snack", commande);
@@ -45,7 +46,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     sizer_categorie->Add(static_nouie, 1, wxALL | wxEXPAND, 5);
     sizer_categorie->Add(static_diver, 1, wxALL | wxEXPAND, 5);
     
-    membres = new Membre(panelAffichage);
+    
     sizer_comende->Add(membres, 0, wxALL | wxEXPAND, 0);
 
     

@@ -1,6 +1,24 @@
 #include "Commande.hpp"
 
-Commande::Commande(wxPanel* panel_parent) : wxBoxSizer(wxHORIZONTAL)
+extern connection C;
+
+namespace pqxx {
+  template<> struct string_traits<wxString> : public string_traits<char const*>
+  {
+    static const bool is_null(const wxString& str) noexcept
+    {
+      return str.IsNull();
+    }
+
+    static const char* c_str(const wxString& str) noexcept
+    {
+      return str.mb_str();
+    }
+  };
+}
+
+
+Commande::Commande(wxPanel* panel_parent, Membre* membre) : wxBoxSizer(wxHORIZONTAL), membre(membre)
 {
     static_sizer_commandes = new wxStaticBoxSizer(wxHORIZONTAL, panel_parent, "Commandes");
     static_sizer_commandes->SetMinSize(wxSize(300, 200));
@@ -102,11 +120,12 @@ void Commande::EventMonnaie(wxCommandEvent& event){
     ReffrechMonnaieARendre();
 }
 void Commande::EventValidationCommande(wxCommandEvent& event){
-    // BDD
+    AjouterVente();  
     Validation();
     ClearCammande();
     ReffrechMonnaieARendre();
     ReffrechTotal();
+
 }
 
 void Commande::EventAnulationCommande(wxCommandEvent& event){
@@ -196,4 +215,38 @@ void Commande::MoodAdmin(){
     ClearCammande();
     btn_anulation_commande->Enable(false);
     btn_validation_commande->Enable(false);
+}
+
+void Commande::AjouterVente() {
+    try {
+        vector<pair<string, string>> vendeurs = membre->GetListPersonne();
+        work txn(C);
+
+        // Insertion de la vente dans la table HISTORIQUE_VENTE avec la date actuelle
+        string insertVente = "INSERT INTO HISTORIQUE_VENTE (DATE_ET_HEURE) VALUES (CURRENT_TIMESTAMP)";
+        txn.exec(insertVente);
+
+        // Récupération de la date et heure de la vente insérée
+        result res = txn.exec("SELECT DATE_ET_HEURE FROM HISTORIQUE_VENTE ORDER BY DATE_ET_HEURE DESC LIMIT 1");
+        string dateVente = res[0][0].as<string>();
+
+        // Insertion des articles vendus dans la table CONTENU_VENTE
+        string insertContenuVente = "INSERT INTO CONTENU_VENTE (NOM_SNACK, DATE_ET_HEURE, OCCURRENCE) VALUES ($1, $2, $3)";
+
+        for (auto article = commandes.begin(); article != commandes.end(); ++article){
+
+            txn.exec_params(insertContenuVente, article->first->GetNom(), dateVente, article->second->GetNbProduit());
+        }
+
+        // Insertion des vendeurs dans la table VENDU_PAR
+        string insertVenduPar = "INSERT INTO VENDU_PAR (DATE_ET_HEURE, NOM, PRENOM) VALUES ($1, $2, $3)";
+        for (const auto& vendeur : vendeurs) {
+            txn.exec_params(insertVenduPar, dateVente, vendeur.first, vendeur.second);
+        }
+
+        txn.commit();
+
+    } catch (const exception& e) {
+        cerr << "Une erreur s'est produite lors de l'ajout de la vente : " << e.what() << std::endl;
+    }
 }
