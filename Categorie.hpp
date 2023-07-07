@@ -20,10 +20,11 @@
 #include "InfoArticle.hpp"
 #include "Commande.hpp"
 #include "SnackAddSup.hpp"
-
+#include "Statistiques.hpp"
 using namespace std;
 class Article;
 class Commande;
+class Statistiques;
 class Categorie : public wxStaticBoxSizer
 {
 private:
@@ -41,15 +42,17 @@ private:
     wxButton* ajoute_article;
     wxPanel* panel_parent;
     Commande* commande;
-
+    Statistiques* statistiques;
     void InitArtilce();
 public:
+    void initStatistiques(Statistiques*);
     void MoodAdmin();
     void MoodUtilisateur();
     void SupprimerArticle(Article*);
     Categorie(wxPanel*, string, Commande*);
     void EventAjouteArticle(wxCommandEvent& event);
     wxString CheminsDeFicher();
+    wxArrayString NomSnacks();
 };
 
 

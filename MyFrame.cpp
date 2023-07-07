@@ -8,6 +8,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     //mode d'axer
     mood_utilisateur = true;
 
+    
+
     //Menu de l'aplications
     wxMenu *menuFile = new wxMenu;
     menuFile->Append(ID_MOOD_ADMIN, "&Mode Admine\tCtrl-A", "Passer laplications en mode Administrateur.");
@@ -27,13 +29,29 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     sizer_comende = new wxBoxSizer(wxHORIZONTAL);
     //les static box
     //les commande des client
+    
     membres = new Membre(panelAffichage);
+
+    
+
     commande = new Commande(panelAffichage, membres);
+    membres->InitCommande(commande);
+
     //les categorie darticle proposer
     static_boison = new Categorie(panelAffichage, "boisson", commande);
     static_snack = new Categorie(panelAffichage, "snack", commande);
     static_nouie = new Categorie(panelAffichage, "nouille", commande);
     static_diver = new Categorie(panelAffichage, "autre", commande);
+
+
+    statistiques = new Statistiques(panelAffichage, this, membres);
+    membres->InitStatistiques(statistiques);
+
+    static_boison->initStatistiques(statistiques);
+    static_snack->initStatistiques(statistiques);
+    static_nouie->initStatistiques(statistiques);
+    static_diver->initStatistiques(statistiques);
+
 
     //la line
     wxStaticLine* ligneHoriz = new wxStaticLine(panelAffichage, -1);
@@ -51,6 +69,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     
     sizer_comende->Add(commande, 0, wxALL | wxEXPAND, 0);
+
+    sizer_comende->Add(statistiques, 0, wxALL | wxEXPAND, 0);
     
     //separations
     sizer_init->Add(ligneHoriz, 0, wxALL | wxEXPAND, 0);
@@ -63,7 +83,25 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     this->Bind(wxEVT_MENU, [this](wxCommandEvent & evt)->void{OnExit();}, wxID_EXIT);
     OnUtilisateur();
 }
+wxArrayString MyFrame::NomSnacks(){
+    wxArrayString snacks;
+    snacks.Add(wxString("Tout snacks"));
+    wxArrayString nom_boison = static_boison->NomSnacks();
+    for(wxString s : nom_boison)
+        snacks.Add(s);
+    wxArrayString nom_snack = static_snack->NomSnacks();
+    for(wxString s : nom_snack)
+        snacks.Add(s);
+    wxArrayString nom_nouie = static_nouie->NomSnacks();
+    for(wxString s : nom_nouie)
+        snacks.Add(s);
+    wxArrayString nom_diver = static_diver->NomSnacks();
+    for(wxString s : nom_diver)
+        snacks.Add(s);
+    
+    return snacks;
 
+}
 
 void MyFrame::OnExit()
 {
@@ -85,6 +123,7 @@ void MyFrame::OnAdmin()
         static_diver->MoodAdmin();
         membres->MoodAdmin();
         commande->MoodAdmin();
+        membres->ModeCommandeAdmin();
     }
     code_is.Destroy();
 }
@@ -97,7 +136,8 @@ void MyFrame::OnUtilisateur()
     static_nouie->MoodUtilisateur();
     static_diver->MoodUtilisateur();
     membres->MoodUtilisateur();
-    commande->MoodUtilisateur();
+    membres->ModeCommandeUse();
+    membres->JustOnePersonne();
 }
 
 void MyFrame::DesactiveUtilisateur(){

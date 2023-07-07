@@ -16,6 +16,7 @@ Personne::Personne(wxPanel* parent, Membre* membres, const string& nom, const st
     size_personne->Add(btn_sup_personne, wxALIGN_RIGHT| wxEXPAND);
     this->SetSizer(size_personne);
     btn_sup_personne->Bind(wxEVT_BUTTON, &Personne::EventRetirePersonne, this);
+    testCheck->Bind(wxEVT_CHECKBOX, &Personne::EventActivierPersonne, this);
 }
 void Personne::EventRetirePersonne(wxCommandEvent& event){
     membre->SupprimerPersonne(this);
@@ -36,4 +37,12 @@ bool Personne::Check(){
 
 pair<string, string> Personne::GetNom(){
     return pair<string, string> (nom, prenom);
+}
+
+void Personne::EventActivierPersonne(wxCommandEvent& event){
+    membre->JustOnePersonne();
+}
+
+wxString Personne::Afiche(){
+    return wxString(nom+ " " + prenom);
 }

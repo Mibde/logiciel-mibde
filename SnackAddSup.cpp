@@ -44,10 +44,6 @@ void updateSnackStrock(const string& nomSnack, int newStock) {
 
 void updateTypeA(const string& nomSnack, const string& newTypeA) {
     try {
-        // Établir une connexion à la base de données
-
-        connection C("dbname = mibde user = postgres password = mibde \
-                      hostaddr = 127.0.0.1 port = 5432");
 
         // Préparer la requête SQL pour mettre à jour le typeA du snack donné
         string query = "UPDATE SNACK SET TYPEA = $1 WHERE NOM_SNACK = $2";
@@ -66,8 +62,7 @@ bool verifyTypeA(const string& nomSnack, const string& typeA) {
     try {
         // Établir une connexion à la base de données
 
-        connection C("dbname = mibde user = postgres password = mibde \
-                      hostaddr = 127.0.0.1 port = 5432");
+
 
         // Préparer la requête SQL pour vérifier le typeA du snack donné
         string query = "SELECT COUNT(*) FROM SNACK WHERE NOM_SNACK = $1 AND TYPEA = $2";
@@ -463,7 +458,7 @@ vector<personne> getPersonnes() {
     }
 
     return personnes;
-}
+} 
 
 
 

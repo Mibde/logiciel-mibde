@@ -20,10 +20,13 @@
 #include "SnackAddSup.hpp"
 #include "Categorie.hpp"
 #include "Membre.hpp"
+#include "Statistiques.hpp"
+#include "Article.hpp"
 #define ID_MOOD_ADMIN (wxID_HIGHEST + 1)
 #define ID_MOOD_UTILISATEUR (wxID_HIGHEST + 2)
 using namespace std;
-
+class Categorie;
+class Statistiques;
 
 class MyFrame : public wxFrame
 {
@@ -31,8 +34,7 @@ private:
 	
 	int indexBoisson = 0;
 	int indexSnack = 0;
-	vector<Article*> liste_boisson;
-	vector<Article*> liste_snack;
+
 	wxPanel* panelAffichage;
 
 
@@ -49,6 +51,8 @@ private:
 
 	Commande* commande;
 
+	Statistiques* statistiques;
+
 	bool mood_utilisateur;
 
 
@@ -62,7 +66,7 @@ public:
 	void OnUtilisateur();
 	void DesactiveUtilisateur();
 	void DesactiveAdmin();
-
+	wxArrayString NomSnacks();
 
 };
 

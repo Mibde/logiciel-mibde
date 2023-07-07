@@ -6,10 +6,10 @@ OBJ = $(SRC:.cpp=.o)
 all : $(EXEC)
 
 %.o : %.cpp
-	$(CXX) -o $@ -c $< -lpqxx -lpq `wx-config --cxxflags --libs`
+	$(CXX) -o $@ -c $< -lpqxx -lpq -I/usr/include/python3.10 -lpython3.10 `wx-config --cxxflags --libs`
 
 $(EXEC) : $(OBJ)
-	$(CXX) -o $@ $^ -lpqxx -lpq `wx-config --cxxflags --libs`
+	$(CXX) -o $@ $^ -lpqxx -lpq -I/usr/include/python3.10 -lpython3.10 `wx-config --cxxflags --libs`
 
 clean :
 	rm -rf *.o

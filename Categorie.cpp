@@ -103,6 +103,7 @@ void Categorie::EventAjouteArticle(wxCommandEvent& event) {
             liste_aliment.push_back(tmp);
                     
             sizer_categorie->Add(tmp, 0, wxALL | wxEXPAND, 0);
+            statistiques->UpdateSelectionSnack();
             panel_parent->Layout();
         }
 
@@ -148,7 +149,7 @@ void Categorie::SupprimerArticle(Article* article) {
             break;
         }
     }
-   
+    statistiques->UpdateSelectionSnack();
     sizer_categorie->Layout();
 }
 
@@ -165,3 +166,14 @@ void Categorie::MoodUtilisateur(){
     }
 }
 
+wxArrayString Categorie::NomSnacks(){
+    wxArrayString noms;
+    for(Article* a : liste_aliment){
+        noms.Add(a->GetNom());
+    }
+    return noms;
+}
+
+void Categorie::initStatistiques(Statistiques* statistiques){
+    this->statistiques = statistiques;
+}

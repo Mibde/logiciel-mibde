@@ -8,6 +8,7 @@
 #include <vector>
 #include <map>
 #include <utility>
+#include <Python.h>
 #include "Article.hpp"
 #include "Produit.hpp"
 using namespace std;

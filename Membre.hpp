@@ -7,8 +7,12 @@
 #include <utility>
 #include "Personne.hpp"
 #include "SnackAddSup.hpp"
+#include "Commande.hpp"
+#include "Statistiques.hpp"
 using namespace std;
 class Personne;
+class Statistiques;
+class Commande;
 class Membre : public wxStaticBoxSizer
 {
 public:
@@ -18,10 +22,20 @@ public:
     void MoodAdmin();
     void MoodUtilisateur();
     vector<pair<string, string>> GetListPersonne();
-
+    void InitCommande(Commande* commande);
+    void InitStatistiques(Statistiques* statistiques);
+    void JustOnePersonne();
+    bool GetIsNotCheck();
+    void ModeCommandeAdmin();
+    void ModeCommandeUse();
+    wxArrayString NomPersonnes();
 private:
     void NewMembre(wxCommandEvent& event);
     void InitPersonnes();
+    bool Check();
+    
+    bool is_not_check;
+    bool mode_commande;
     wxPanel* panel_parent;
     wxPanel* panel_membres;
     wxScrolledWindow* scrole_membres;
@@ -31,7 +45,8 @@ private:
     wxBoxSizer* sizer_scrole;
     wxBoxSizer* sizer_membres_button;
     wxButton* ajoute_personne;
-    
+    Commande* commande;
+    Statistiques* statistiques;
 };
 
 #endif // MEMBRE_HPP

@@ -59,6 +59,7 @@ Commande::Commande(wxPanel* panel_parent, Membre* membre) : wxBoxSizer(wxHORIZON
     static_sizer_commandes->Add(scrole_commandes, 1, wxALL | wxEXPAND, 0);
     this->Add(static_sizer_commandes, 1, wxALL | wxEXPAND, 0);
     this->Add(sizer_valid_info, 1, wxALL | wxEXPAND, 15);
+    MoodAdmin();
     monnaie->Bind(wxEVT_SPINCTRLDOUBLE, &Commande::EventMonnaie, this);
     btn_anulation_commande->Bind(wxEVT_BUTTON, &Commande::EventAnulationCommande, this);
     btn_validation_commande->Bind(wxEVT_BUTTON, &Commande::EventValidationCommande, this);
@@ -122,7 +123,7 @@ void Commande::EventMonnaie(wxCommandEvent& event){
 void Commande::EventValidationCommande(wxCommandEvent& event){
     AjouterVente();  
     Validation();
-    ClearCammande();
+    ClearCommande();
     ReffrechMonnaieARendre();
     ReffrechTotal();
 
@@ -130,7 +131,7 @@ void Commande::EventValidationCommande(wxCommandEvent& event){
 
 void Commande::EventAnulationCommande(wxCommandEvent& event){
     Anulation();
-    ClearCammande();
+    ClearCommande();
     ReffrechMonnaieARendre();
     ReffrechTotal();
 }
@@ -144,7 +145,7 @@ void Commande::Anulation(){
         it->first->AnulationsVente();
 }
 
-void Commande::ClearCammande(){
+void Commande::ClearCommande(){
     for (auto it = commandes.begin(); it != commandes.end(); ++it)
     {
         // Suppression de l'élément du sizer
@@ -212,7 +213,10 @@ void Commande::MoodUtilisateur(){
 }
 
 void Commande::MoodAdmin(){
-    ClearCammande();
+    Anulation();
+    ClearCommande();
+    ReffrechMonnaieARendre();
+    ReffrechTotal();
     btn_anulation_commande->Enable(false);
     btn_validation_commande->Enable(false);
 }

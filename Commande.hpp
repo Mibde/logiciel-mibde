@@ -59,7 +59,7 @@ private:
     double CalculMonnaie();
     void ReffrechMonnaieARendre();
     void EventMonnaie(wxCommandEvent& event);
-    void ClearCammande();
+    void ClearCommande();
     void Anulation();
     void Validation();
     void AjouterVente();

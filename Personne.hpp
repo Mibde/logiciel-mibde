@@ -25,8 +25,10 @@ public:
     void MoodAdmin();
     void MoodUtilisateur();
     void EventRetirePersonne(wxCommandEvent& event);
+    void EventActivierPersonne(wxCommandEvent& event);
     bool Check();
     pair<string, string> GetNom();
+    wxString Afiche();
     
 
 };
