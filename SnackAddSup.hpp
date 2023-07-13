@@ -59,7 +59,12 @@ bool nomInactif(const string& nom, const string& prenom);
 void ActiverPersonne(const string& nom, const string& prenom);
 vector<personne> getPersonnes();
 
+vector<string> listCommandeJour(string date);
+vector<string> listCommandeJourSnack(string date, string snack);
+vector<string> listCommandeJourPersone(string date, string persone);
+vector<string> listCommandeJourSnackPersone(string date,string snack, string persone);
 
+wxString descriptionCommande(wxString date_et_heur);
 
 
 #endif

@@ -126,7 +126,8 @@ void Commande::EventValidationCommande(wxCommandEvent& event){
     ClearCommande();
     ReffrechMonnaieARendre();
     ReffrechTotal();
-
+    monnaie->SetValue(0.0);
+    ReffrechMonnaieARendre();
 }
 
 void Commande::EventAnulationCommande(wxCommandEvent& event){
@@ -134,6 +135,8 @@ void Commande::EventAnulationCommande(wxCommandEvent& event){
     ClearCommande();
     ReffrechMonnaieARendre();
     ReffrechTotal();
+    monnaie->SetValue(0.0);
+    ReffrechMonnaieARendre();
 }
 
 void Commande::Validation(){

@@ -11,6 +11,165 @@ string wxStringToString(const wxString& wxStr) {
 extern connection C("dbname = mibde user = postgres password = mibde \
 hostaddr = 127.0.0.1 port = 5432");
 
+wxString descriptionCommande(wxString date_et_heur)
+{
+    string s = "La commande continent :\n";
+    try {
+
+        nontransaction txn(C);
+
+        // Construction de la requête SQL
+        string sql = "SELECT * "
+                     "FROM contenu_vente WHERE date_et_heure = $1";
+
+        // Exécution de la requête avec les paramètres
+        result res = txn.exec_params(sql, wxStringToString(date_et_heur));
+
+        // Parcours des résultats et construction de la liste de snacks
+        for (auto row : res) {
+            
+            s += row["nom_snack"].as<string>() + "X" ;
+            s += row["occurrence"].as<string>() + "\n";
+
+        }
+
+        sql = "SELECT * FROM vendu_par WHERE date_et_heure = $1";
+
+        res = txn.exec_params(sql, wxStringToString(date_et_heur));
+
+        s += "\nEt vendu par :\n";
+
+
+        for (auto row : res) {
+            s += row["nom"].as<string>() + " " ;
+            s += row["prenom"].as<string>() + "\n";
+        }
+    } catch (const exception& e) {
+        wxLogError("Une erreur s'est produite lors de la descriptions du snack : '%s'", e.what());
+    }
+    return wxString(s);
+}
+
+vector<string> listCommandeJour(string date){
+        vector<string> historique = {};
+
+    try {
+
+        nontransaction txn(C);
+
+        // Construction de la requête SQL
+        string sql = "SELECT * "
+                     "FROM historique_vente WHERE date_trunc('day', date_et_heure) = $1" ;
+
+        // Exécution de la requête avec les paramètres
+
+        result res = txn.exec_params(sql, date);
+
+        // Parcours des résultats et construction de la liste de snacks
+   
+        for (auto row : res) {
+            string s;
+            s = row["date_et_heure"].as<string>();
+            historique.push_back(s);
+        }
+    } catch (const exception& e) {
+        wxLogError("Une erreur s'est produite lors de la récupération des snacks : '%s'", e.what());
+    }
+
+    return historique;
+}
+vector<string> listCommandeJourSnack(string date, string snack){
+        vector<string> historique = {};
+
+    try {
+
+        nontransaction txn(C);
+
+        // Construction de la requête SQL
+        string sql = "SELECT * "
+                     "FROM contenu_vente WHERE date_trunc('day', date_et_heure) = $1 AND nom_snack = $2" ;
+
+        // Exécution de la requête avec les paramètres
+
+        result res = txn.exec_params(sql, date, snack);
+
+        // Parcours des résultats et construction de la liste de snacks
+   
+        for (auto row : res) {
+            string s;
+            s = row["date_et_heure"].as<string>();
+            historique.push_back(s);
+        }
+    } catch (const exception& e) {
+        wxLogError("Une erreur s'est produite lors de la récupération des snacks : '%s'", e.what());
+    }
+
+    return historique;
+}
+vector<string> listCommandeJourPersone(string date, string persone){
+        vector<string> historique = {};
+
+    try {
+        stringstream ss(persone);
+        string nom;
+        getline(ss, nom, ' ');
+        string prenom;
+        getline(ss, prenom, ' ');
+        nontransaction txn(C);
+
+        // Construction de la requête SQL
+        string sql = "SELECT * "
+                     "FROM vendu_par WHERE date_trunc('day', date_et_heure) = $1 AND nom = $2 AND prenom = $3" ;
+
+        // Exécution de la requête avec les paramètres
+
+        result res = txn.exec_params(sql, date, nom, prenom);
+
+        // Parcours des résultats et construction de la liste de snacks
+   
+        for (auto row : res) {
+            string s;
+            s = row["date_et_heure"].as<string>();
+            historique.push_back(s);
+        }
+    } catch (const exception& e) {
+        wxLogError("Une erreur s'est produite lors de la récupération des snacks : '%s'", e.what());
+    }
+
+    return historique;
+}
+vector<string> listCommandeJourSnackPersone(string date,string snack, string persone){
+        vector<string> historique = {};
+
+    try {
+        stringstream ss(persone);
+        string nom;
+        getline(ss, nom, ' ');
+        string prenom;
+        getline(ss, prenom, ' ');
+        nontransaction txn(C);
+
+        // Construction de la requête SQL
+        string sql = "SELECT date_et_heure "
+                     "FROM vendu_par WHERE date_trunc('day', date_et_heure) = $1 AND nom = $2 AND prenom = $3 INTERSECT SELECT date_et_heure FROM contenu_vente WHERE date_trunc('day', date_et_heure) = $1 AND nom_snack = $4" ;
+
+        // Exécution de la requête avec les paramètres
+
+        result res = txn.exec_params(sql, date, nom, prenom, snack);
+
+        // Parcours des résultats et construction de la liste de snacks
+   
+        for (auto row : res) {
+            string s;
+            s = row["date_et_heure"].as<string>();
+            historique.push_back(s);
+        }
+    } catch (const exception& e) {
+        wxLogError("Une erreur s'est produite lors de la récupération des snacks : '%s'", e.what());
+    }
+
+    return historique;
+}
 void updateSnackPrice(const string& nomSnack, double nouveauPrix) {
     try {
 

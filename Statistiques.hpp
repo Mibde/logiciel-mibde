@@ -11,6 +11,7 @@
 #include <utility>
 #include "MyFrame.hpp"
 #include "Membre.hpp"
+#include "Journalier.hpp"
 using namespace std;
 
 class MyFrame;
@@ -22,6 +23,7 @@ public:
 private:
     MyFrame* frame_parent;
     Membre* membre;
+    wxPanel* panel_parent;
 
     // afiche le texte
 
@@ -36,6 +38,15 @@ private:
 
     wxChoice* selection_snack;
     wxChoice* selection_personne;
+
+    wxButton* valide_state;
+
+    wxString str_debus;
+    wxString str_fin;
+
+    void OnDateSelectedDebus(wxDateEvent& event);
+    void OnDateSelectedFin(wxDateEvent& event);
+    void EventAficheState(wxCommandEvent& event);
 };
 
 
