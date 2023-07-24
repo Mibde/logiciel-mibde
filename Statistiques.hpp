@@ -9,6 +9,7 @@
 #include <vector>
 #include <algorithm>
 #include <utility>
+
 #include "MyFrame.hpp"
 #include "Membre.hpp"
 #include "Journalier.hpp"
@@ -20,6 +21,8 @@ public:
     Statistiques(wxPanel* panel_parent, MyFrame* frame_parent, Membre* membre);
     void UpdateSelectionSnack();
     void UpdateSelectionPersonne();
+    void MoodUtilisateur();
+    void MoodAdmin();
 private:
     MyFrame* frame_parent;
     Membre* membre;
@@ -33,8 +36,12 @@ private:
     wxDatePickerCtrl* date_picker_debus;
     wxDatePickerCtrl* date_picker_fin;
 
-    wxBoxSizer* sizer_debus;
-    wxBoxSizer* sizer_fin;
+    wxBoxSizer* sizer_parame;
+    wxBoxSizer* sizer_date;
+    wxBoxSizer* sizer_choice;
+
+    wxBoxSizer* sizer_btn_validation;
+
 
     wxChoice* selection_snack;
     wxChoice* selection_personne;
@@ -43,6 +50,8 @@ private:
 
     wxString str_debus;
     wxString str_fin;
+
+    bool mode_utilisateur;
 
     void OnDateSelectedDebus(wxDateEvent& event);
     void OnDateSelectedFin(wxDateEvent& event);

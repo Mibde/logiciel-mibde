@@ -13,6 +13,7 @@ public:
     Historique(wxScrolledWindow*, wxString, Journalier*);
     void EventRetireHistorique(wxCommandEvent& event);
     void EventInfoHistorique(wxCommandEvent& event);
+    void MoodUtilisateur();
 private:
     wxString date_heur;
     wxBoxSizer* histoirque_sizer;

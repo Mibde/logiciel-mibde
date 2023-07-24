@@ -11,9 +11,429 @@ string wxStringToString(const wxString& wxStr) {
 extern connection C("dbname = mibde user = postgres password = mibde \
 hostaddr = 127.0.0.1 port = 5432");
 
+float commandePrix(string date_heur)
+{
+     float prix = 0.0f;
+    try {
+
+        nontransaction txn(C);
+
+        // Construction de la requête SQL
+        string sql = "SELECT SUM(CV.OCCURRENCE * CV.PRIX) AS somme_produits FROM CONTENU_VENTE CV WHERE CV.DATE_ET_HEURE = $1";
+
+        // Exécution de la requête avec les paramètres
+        result res = txn.exec_params(sql, date_heur);
+
+        if (!res.empty() && !res[0][0].is_null())
+            prix = res[0][0].as<float>();
+
+
+    } catch (const exception& e) {
+        wxLogError("Une erreur s'est produite lors du clacule du prix personne 2 : '%s'", e.what());
+    }
+    return prix;
+}
+float commandePrixAchat(string date_heur)
+{
+    float prix = 0.0f;
+    try {
+
+        nontransaction txn(C);
+
+        // Construction de la requête SQL
+        string sql = "SELECT SUM(CV.OCCURRENCE * CV.PRIX_ACHAT) AS somme_produits FROM CONTENU_VENTE CV WHERE CV.DATE_ET_HEURE = $1";
+
+        // Exécution de la requête avec les paramètres
+        result res = txn.exec_params(sql, date_heur);
+
+        if (!res.empty() && !res[0][0].is_null())
+            prix = res[0][0].as<float>();
+
+
+    } catch (const exception& e) {
+        wxLogError("Une erreur s'est produite lors du clacule du prix personne 2 : '%s'", e.what());
+    }
+    return prix;
+
+}
+
+
+float CommandePrixAchatJourPersonneSnack(string date_heur_debut, string date_heur_fin,string snack, string personne)
+{
+    float prix = 0.0f;
+    try {
+
+        stringstream ss(personne);
+        string nom;
+        getline(ss, nom, ' ');
+        string prenom;
+        getline(ss, prenom, ' ');
+        nontransaction txn(C);
+        // Construction de la requête SQL
+        string sql = "SELECT SUM(CV.OCCURRENCE * CV.PRIX_ACHAT) AS somme_produits FROM CONTENU_VENTE CV JOIN VENDU_PAR VP ON CV.DATE_ET_HEURE = VP.DATE_ET_HEURE JOIN CONTENU_VENTE CE ON CV.DATE_ET_HEURE = CE.DATE_ET_HEURE WHERE VP.NOM = $4 AND VP.PRENOM = $5 AND CE.NOM_SNACK = $3 AND CV.DATE_ET_HEURE >= $1 AND CV.DATE_ET_HEURE < $2 AND VP.DATE_ET_HEURE >= $1 AND VP.DATE_ET_HEURE < $2 AND CE.DATE_ET_HEURE >= $1 AND CE.DATE_ET_HEURE < $2";
+
+        // Exécution de la requête avec les paramètres
+        result res = txn.exec_params(sql, date_heur_debut, date_heur_fin, snack, nom, prenom);
+
+        if (!res.empty() && !res[0][0].is_null()){
+            prix = res[0][0].as<float>();
+        }
+
+
+        
+    } catch (const exception& e) {
+        wxLogError("Une erreur s'est produite lors du clacule du prix personne 2: '%s'", e.what());
+    }
+    return prix;
+}
+
+float CommandePrixAchatJourPersonneSnackSpesific(string date_heur_debut, string date_heur_fin, string snack, string personne)
+{
+    float prix = 0.0f;
+    try {
+
+        stringstream ss(personne);
+        string nom;
+        getline(ss, nom, ' ');
+        string prenom;
+        getline(ss, prenom, ' ');
+        nontransaction txn(C);
+        // Construction de la requête SQL
+        string sql = "SELECT SUM(CV.OCCURRENCE * CV.PRIX_ACHAT) AS somme_produits FROM CONTENU_VENTE CV JOIN VENDU_PAR VP ON CV.DATE_ET_HEURE = VP.DATE_ET_HEURE WHERE VP.NOM = $4 AND VP.PRENOM = $5 AND CV.NOM_SNACK = $3 AND CV.DATE_ET_HEURE >= $1 AND CV.DATE_ET_HEURE < $2 AND VP.DATE_ET_HEURE >= $1 AND VP.DATE_ET_HEURE < $2";
+
+        // Exécution de la requête avec les paramètres
+        result res = txn.exec_params(sql, date_heur_debut, date_heur_fin, snack, nom, prenom);
+
+        if (!res.empty() && !res[0][0].is_null())
+            prix = res[0][0].as<float>();
+
+
+        
+    } catch (const exception& e) {
+        wxLogError("Une erreur s'est produite lors du clacule du prix personne : 4'%s'", e.what());
+    }
+    return prix;
+}
+
+float CommandePrixAchatJourPersonne(string date_heur_debut, string date_heur_fin, string personne)
+{
+    float prix = 0.0f;
+    try {
+
+
+        stringstream ss(personne);
+        string nom;
+        getline(ss, nom, ' ');
+        string prenom;
+        getline(ss, prenom, ' ');
+        nontransaction txn(C);
+        // Construction de la requête SQL
+        string sql = "SELECT SUM(CV.OCCURRENCE * CV.PRIX_ACHAT) AS somme_produits FROM CONTENU_VENTE CV JOIN VENDU_PAR VP ON CV.DATE_ET_HEURE = VP.DATE_ET_HEURE WHERE VP.NOM = $3 AND VP.PRENOM = $4 AND CV.DATE_ET_HEURE >= $1 AND CV.DATE_ET_HEURE < $2 AND VP.DATE_ET_HEURE >= $1 AND VP.DATE_ET_HEURE < $2";
+
+        // Exécution de la requête avec les paramètres
+        result res = txn.exec_params(sql, date_heur_debut, date_heur_fin, nom, prenom);
+
+        if (!res.empty() && !res[0][0].is_null())
+            prix = res[0][0].as<float>();
+
+
+        
+    } catch (const exception& e) {
+        wxLogError("Une erreur s'est produite lors du clacule du prix personne : '%s'", e.what());
+    }
+    return prix;
+}
+
+float CommandePrixAchatJourSnack(string date_heur_debut, string date_heur_fin, string snack)
+{
+    float prix = 0.0f;
+    try {
+
+        nontransaction txn(C);
+
+        // Construction de la requête SQL
+        string sql = "SELECT SUM(CV.OCCURRENCE * CV.PRIX_ACHAT) AS somme_produits FROM CONTENU_VENTE CV JOIN CONTENU_VENTE CE ON CV.DATE_ET_HEURE = CE.DATE_ET_HEURE WHERE CE.NOM_SNACK = $3 AND CV.DATE_ET_HEURE >= $1 AND CV.DATE_ET_HEURE < $2 AND CE.DATE_ET_HEURE >= $1 AND CE.DATE_ET_HEURE < $2";
+
+        // Exécution de la requête avec les paramètres
+        result res = txn.exec_params(sql, date_heur_debut, date_heur_fin, snack);
+        if (!res.empty() && !res[0][0].is_null())
+            prix = res[0][0].as<float>();
+
+
+        
+    } catch (const exception& e) {
+        wxLogError("Une erreur s'est produite lors du clacule du prix personne 2: '%s'", e.what());
+    }
+    return prix;
+}
+
+float CommandePrixAchatJourSnackSpesific(string date_heur_debut, string date_heur_fin, string snack)
+{
+    float prix = 0.0f;
+    try {
+
+        nontransaction txn(C);
+
+        // Construction de la requête SQL
+        string sql = "SELECT SUM(CV.OCCURRENCE * CV.PRIX_ACHAT) AS somme_produits FROM CONTENU_VENTE CV WHERE CV.NOM_SNACK = $3 AND CV.DATE_ET_HEURE >= $1 AND CV.DATE_ET_HEURE < $2";
+
+        // Exécution de la requête avec les paramètres
+        result res = txn.exec_params(sql, date_heur_debut, date_heur_fin, snack);
+
+        if (!res.empty() && !res[0][0].is_null())
+            prix = res[0][0].as<float>();
+
+
+    } catch (const exception& e) {
+        wxLogError("Une erreur s'est produite lors du clacule du prix personne 1 : '%s'", e.what());
+    }
+    return prix;
+}
+
+float CommandePrixAchatJour(string date_heur_debut, string date_heur_fin)
+{
+    float prix = 0.0f;
+    try {
+
+        nontransaction txn(C);
+
+        // Construction de la requête SQL
+        string sql = "SELECT SUM(CV.OCCURRENCE * CV.PRIX_ACHAT) AS somme_produits FROM CONTENU_VENTE CV WHERE CV.DATE_ET_HEURE >= $1 AND CV.DATE_ET_HEURE < $2";
+
+        // Exécution de la requête avec les paramètres
+        result res = txn.exec_params(sql, date_heur_debut, date_heur_fin);
+
+        if (!res.empty() && !res[0][0].is_null())
+            prix = res[0][0].as<float>();
+
+
+    } catch (const exception& e) {
+        wxLogError("Une erreur s'est produite lors du clacule du prix personne 1 : '%s'", e.what());
+    }
+    return prix;
+}
+
+//----------------------------------------------------------------------------------------------------------------------------
+float CommandePrixJourPersonneSnack(string date_heur_debut, string date_heur_fin,string snack, string personne)
+{
+    float prix = 0.0f;
+    try {
+
+        stringstream ss(personne);
+        string nom;
+        getline(ss, nom, ' ');
+        string prenom;
+        getline(ss, prenom, ' ');
+        nontransaction txn(C);
+        // Construction de la requête SQL
+        string sql = "SELECT SUM(CV.OCCURRENCE * CV.PRIX) AS somme_produits FROM CONTENU_VENTE CV JOIN VENDU_PAR VP ON CV.DATE_ET_HEURE = VP.DATE_ET_HEURE JOIN CONTENU_VENTE CE ON CV.DATE_ET_HEURE = CE.DATE_ET_HEURE WHERE VP.NOM = $4 AND VP.PRENOM = $5 AND CE.NOM_SNACK = $3 AND CV.DATE_ET_HEURE >= $1 AND CV.DATE_ET_HEURE < $2 AND VP.DATE_ET_HEURE >= $1 AND VP.DATE_ET_HEURE < $2 AND CE.DATE_ET_HEURE >= $1 AND CE.DATE_ET_HEURE < $2";
+
+        // Exécution de la requête avec les paramètres
+        result res = txn.exec_params(sql, date_heur_debut, date_heur_fin, snack, nom, prenom);
+
+        if (!res.empty() && !res[0][0].is_null()){
+            prix = res[0][0].as<float>();
+            
+        }
+
+
+        
+    } catch (const exception& e) {
+        wxLogError("Une erreur s'est produite lors du clacule du prix personne 1: '%s'", e.what());
+    }
+    return prix;
+}
+
+float CommandePrixJourPersonneSnackSpesific(string date_heur_debut, string date_heur_fin, string snack, string personne, int &occurrence)
+{
+    float prix = 0.0f;
+    try {
+
+        stringstream ss(personne);
+        string nom;
+        getline(ss, nom, ' ');
+        string prenom;
+        getline(ss, prenom, ' ');
+        nontransaction txn(C);
+        // Construction de la requête SQL
+        string sql = "SELECT SUM(CV.OCCURRENCE * CV.PRIX) AS somme_produits, SUM(CV.OCCURRENCE) FROM CONTENU_VENTE CV JOIN VENDU_PAR VP ON CV.DATE_ET_HEURE = VP.DATE_ET_HEURE WHERE VP.NOM = $4 AND VP.PRENOM = $5 AND CV.NOM_SNACK = $3 AND CV.DATE_ET_HEURE >= $1 AND CV.DATE_ET_HEURE < $2 AND VP.DATE_ET_HEURE >= $1 AND VP.DATE_ET_HEURE < $2";
+
+        // Exécution de la requête avec les paramètres
+        result res = txn.exec_params(sql, date_heur_debut, date_heur_fin, snack, nom, prenom);
+
+        if (!res.empty() && !res[0][0].is_null()){
+            prix = res[0][0].as<float>();
+            occurrence = res[0][1].as<int>();
+        }
+
+
+        
+    } catch (const exception& e) {
+        wxLogError("Une erreur s'est produite lors du clacule du prix personne : 3'%s'", e.what());
+    }
+    return prix;
+}
+
+float CommandePrixJourPersonne(string date_heur_debut, string date_heur_fin, string personne)
+{
+    float prix = 0.0f;
+    try {
+
+
+        stringstream ss(personne);
+        string nom;
+        getline(ss, nom, ' ');
+        string prenom;
+        getline(ss, prenom, ' ');
+        nontransaction txn(C);
+        // Construction de la requête SQL
+        string sql = "SELECT SUM(CV.OCCURRENCE * CV.PRIX) AS somme_produits FROM CONTENU_VENTE CV JOIN VENDU_PAR VP ON CV.DATE_ET_HEURE = VP.DATE_ET_HEURE WHERE VP.NOM = $3 AND VP.PRENOM = $4 AND CV.DATE_ET_HEURE >= $1 AND CV.DATE_ET_HEURE < $2 AND VP.DATE_ET_HEURE >= $1 AND VP.DATE_ET_HEURE < $2";
+
+        // Exécution de la requête avec les paramètres
+        result res = txn.exec_params(sql, date_heur_debut, date_heur_fin, nom, prenom);
+
+        if (!res.empty() && !res[0][0].is_null())
+            prix = res[0][0].as<float>();
+
+
+        
+    } catch (const exception& e) {
+        wxLogError("Une erreur s'est produite lors du clacule du prix personne : '%s'", e.what());
+    }
+    return prix;
+}
+
+float CommandePrixJourSnack(string date_heur_debut, string date_heur_fin, string snack)
+{
+    float prix = 0.0f;
+    try {
+
+        nontransaction txn(C);
+
+        // Construction de la requête SQL
+        string sql = "SELECT SUM(CV.OCCURRENCE * CV.PRIX) AS somme_produits FROM CONTENU_VENTE CV JOIN CONTENU_VENTE CE ON CV.DATE_ET_HEURE = CE.DATE_ET_HEURE WHERE CE.NOM_SNACK = $3 AND CV.DATE_ET_HEURE >= $1 AND CV.DATE_ET_HEURE < $2 AND CE.DATE_ET_HEURE >= $1 AND CE.DATE_ET_HEURE < $2";
+
+        // Exécution de la requête avec les paramètres
+        result res = txn.exec_params(sql, date_heur_debut, date_heur_fin, snack);
+        if (!res.empty() && !res[0][0].is_null())
+            prix = res[0][0].as<float>();
+
+
+        
+    } catch (const exception& e) {
+        wxLogError("Une erreur s'est produite lors du clacule du prix personne 2: '%s'", e.what());
+    }
+    return prix;
+}
+
+float CommandePrixJourSnackSpesific(string date_heur_debut, string date_heur_fin, string snack, int &occurrence)
+{
+    float prix = 0.0f;
+    try {
+
+        nontransaction txn(C);
+
+        // Construction de la requête SQL
+        string sql = "SELECT SUM(CV.OCCURRENCE * CV.PRIX) AS somme_produits, SUM(CV.OCCURRENCE) FROM CONTENU_VENTE CV WHERE CV.NOM_SNACK = $3 AND CV.DATE_ET_HEURE >= $1 AND CV.DATE_ET_HEURE < $2";
+
+        // Exécution de la requête avec les paramètres
+        result res = txn.exec_params(sql, date_heur_debut, date_heur_fin, snack);
+
+        if (!res.empty() && !res[0][0].is_null()){
+            prix = res[0][0].as<float>();
+            occurrence = res[0][1].as<int>();
+        }
+
+
+    } catch (const exception& e) {
+        wxLogError("Une erreur s'est produite lors du clacule du prix personne 1 : '%s'", e.what());
+    }
+    return prix;
+}
+
+float CommandePrixJour(string date_heur_debut, string date_heur_fin)
+{
+    float prix = 0.0f;
+    try {
+
+        nontransaction txn(C);
+
+        // Construction de la requête SQL
+        string sql = "SELECT SUM(CV.OCCURRENCE * CV.PRIX) AS somme_produits FROM CONTENU_VENTE CV WHERE CV.DATE_ET_HEURE >= $1 AND CV.DATE_ET_HEURE < $2";
+
+        // Exécution de la requête avec les paramètres
+        result res = txn.exec_params(sql, date_heur_debut, date_heur_fin);
+
+        if (!res.empty() && !res[0][0].is_null())
+            prix = res[0][0].as<float>();
+
+
+    } catch (const exception& e) {
+        wxLogError("Une erreur s'est produite lors du clacule du prix personne 2 : '%s'", e.what());
+    }
+    return prix;
+}
+
+
+string RecentCommande(){
+    string dateVente;
+    try {
+        nontransaction txn(C);
+        result res = txn.exec("SELECT DATE_ET_HEURE FROM HISTORIQUE_VENTE ORDER BY DATE_ET_HEURE DESC LIMIT 1");
+        dateVente = res[0][0].as<string>();
+    } catch (const exception& e) {
+        wxLogError("Une erreur s'est produite lors la suprestion deletRecentCommande: '%s'", e.what());
+    }
+    return dateVente;
+}
+
+
+void deletCommande(wxString date_et_heur)
+{   
+    string date_heur = wxStringToString(date_et_heur);
+    try {
+
+        work txn(C);
+        cout << "-----------------------------------" << endl;
+        // Construction de la requête SQL
+        string sql = "DELETE FROM contenu_vente WHERE DATE_ET_HEURE = $1" ;
+
+        // Exécution de la requête avec les paramètres
+
+        txn.exec_params(sql, date_heur);
+        cout << "-----------------------------------" << endl;
+        sql = "DELETE FROM vendu_par WHERE DATE_ET_HEURE = $1" ;
+
+        // Exécution de la requête avec les paramètres
+
+        txn.exec_params(sql, date_heur);
+        cout << "-----------------------------------" << endl;
+        sql = "DELETE FROM historique_vente WHERE DATE_ET_HEURE = $1" ;
+
+        // Exécution de la requête avec les paramètres
+
+        txn.exec_params(sql, date_heur);
+        cout << "-----------------------------------" << endl;
+        txn.commit();
+        
+    } catch (const exception& e) {
+        wxLogError("Une erreur s'est produite lors de la récupération des snacks : '%s'", e.what());
+    }
+}
+
 wxString descriptionCommande(wxString date_et_heur)
 {
-    string s = "La commande continent :\n";
+    float prix = commandePrix(wxStringToString(date_et_heur));
+    float prix_achat = commandePrixAchat(wxStringToString(date_et_heur));
+    ostringstream s;
+
+    
+    s << "Le prix de la commande et de " << fixed << setprecision(2) << prix << "\n";
+    s << "Le prix d'achat de la commande et de " << fixed << setprecision(2) << prix_achat << "\n";
+    s << "Le benefice de la commande et de " << fixed << setprecision(2) << prix-prix_achat << "\n";
+    
+    s << "La commande continent :\n";
+
     try {
 
         nontransaction txn(C);
@@ -28,8 +448,8 @@ wxString descriptionCommande(wxString date_et_heur)
         // Parcours des résultats et construction de la liste de snacks
         for (auto row : res) {
             
-            s += row["nom_snack"].as<string>() + "X" ;
-            s += row["occurrence"].as<string>() + "\n";
+            s << row["nom_snack"].as<string>() << "X" ;
+            s << row["occurrence"].as<string>() << "\n";
 
         }
 
@@ -37,33 +457,33 @@ wxString descriptionCommande(wxString date_et_heur)
 
         res = txn.exec_params(sql, wxStringToString(date_et_heur));
 
-        s += "\nEt vendu par :\n";
+        s << "\nEt vendu par :\n";
 
 
         for (auto row : res) {
-            s += row["nom"].as<string>() + " " ;
-            s += row["prenom"].as<string>() + "\n";
+            s << row["nom"].as<string>() << " " ;
+            s << row["prenom"].as<string>() << "\n";
         }
     } catch (const exception& e) {
         wxLogError("Une erreur s'est produite lors de la descriptions du snack : '%s'", e.what());
     }
-    return wxString(s);
+    return wxString(s.str());
 }
 
-vector<string> listCommandeJour(string date){
+vector<string> listCommandeJour(string date_debu, string date_fin){
         vector<string> historique = {};
 
     try {
 
         nontransaction txn(C);
-
+        cout << "date_debu : " << date_debu <<" date_fin : " << date_fin << endl;
         // Construction de la requête SQL
-        string sql = "SELECT * "
-                     "FROM historique_vente WHERE date_trunc('day', date_et_heure) = $1" ;
+        string sql = "SELECT DATE_ET_HEURE "
+                     "FROM historique_vente WHERE DATE_ET_HEURE >= $1 AND DATE_ET_HEURE < $2" ;
 
         // Exécution de la requête avec les paramètres
 
-        result res = txn.exec_params(sql, date);
+        result res = txn.exec_params(sql, date_debu, date_fin);
 
         // Parcours des résultats et construction de la liste de snacks
    
@@ -78,7 +498,7 @@ vector<string> listCommandeJour(string date){
 
     return historique;
 }
-vector<string> listCommandeJourSnack(string date, string snack){
+vector<string> listCommandeJourSnack(string date_debu, string date_fin, string snack){
         vector<string> historique = {};
 
     try {
@@ -86,13 +506,13 @@ vector<string> listCommandeJourSnack(string date, string snack){
         nontransaction txn(C);
 
         // Construction de la requête SQL
-        string sql = "SELECT * "
-                     "FROM contenu_vente WHERE date_trunc('day', date_et_heure) = $1 AND nom_snack = $2" ;
+        string sql = "SELECT DATE_ET_HEURE "
+                     "FROM contenu_vente WHERE DATE_ET_HEURE >= $1 AND DATE_ET_HEURE < $2 AND nom_snack = $3" ;
 
         // Exécution de la requête avec les paramètres
-
-        result res = txn.exec_params(sql, date, snack);
-
+        
+        result res = txn.exec_params(sql, date_debu, date_fin, snack);
+        
         // Parcours des résultats et construction de la liste de snacks
    
         for (auto row : res) {
@@ -106,7 +526,7 @@ vector<string> listCommandeJourSnack(string date, string snack){
 
     return historique;
 }
-vector<string> listCommandeJourPersone(string date, string persone){
+vector<string> listCommandeJourPersone(string date_debu, string date_fin, string persone){
         vector<string> historique = {};
 
     try {
@@ -118,12 +538,12 @@ vector<string> listCommandeJourPersone(string date, string persone){
         nontransaction txn(C);
 
         // Construction de la requête SQL
-        string sql = "SELECT * "
-                     "FROM vendu_par WHERE date_trunc('day', date_et_heure) = $1 AND nom = $2 AND prenom = $3" ;
+        string sql = "SELECT DATE_ET_HEURE "
+                     "FROM vendu_par WHERE DATE_ET_HEURE >= $1 AND DATE_ET_HEURE < $2 AND nom = $3 AND prenom = $4" ;
 
         // Exécution de la requête avec les paramètres
 
-        result res = txn.exec_params(sql, date, nom, prenom);
+        result res = txn.exec_params(sql, date_debu, date_fin, nom, prenom);
 
         // Parcours des résultats et construction de la liste de snacks
    
@@ -138,7 +558,7 @@ vector<string> listCommandeJourPersone(string date, string persone){
 
     return historique;
 }
-vector<string> listCommandeJourSnackPersone(string date,string snack, string persone){
+vector<string> listCommandeJourSnackPersone(string date_debu, string date_fin,string snack, string persone){
         vector<string> historique = {};
 
     try {
@@ -151,11 +571,11 @@ vector<string> listCommandeJourSnackPersone(string date,string snack, string per
 
         // Construction de la requête SQL
         string sql = "SELECT date_et_heure "
-                     "FROM vendu_par WHERE date_trunc('day', date_et_heure) = $1 AND nom = $2 AND prenom = $3 INTERSECT SELECT date_et_heure FROM contenu_vente WHERE date_trunc('day', date_et_heure) = $1 AND nom_snack = $4" ;
+                     "FROM vendu_par WHERE DATE_ET_HEURE >= $1 AND DATE_ET_HEURE < $2 AND nom = $3 AND prenom = $4 INTERSECT SELECT date_et_heure FROM contenu_vente WHERE DATE_ET_HEURE BETWEEN $1 AND $2 AND nom_snack = $5" ;
 
         // Exécution de la requête avec les paramètres
 
-        result res = txn.exec_params(sql, date, nom, prenom, snack);
+        result res = txn.exec_params(sql, date_debu, date_fin, nom, prenom, snack);
 
         // Parcours des résultats et construction de la liste de snacks
    
@@ -441,7 +861,7 @@ vector<Snack> getSnacks(string categorie) {
 
         // Construction de la requête SQL
         string sql = "SELECT NOM_SNACK, PRIX, PRIX_ACHAT, DESCRIPTION, QUANTITE, EN_VENTE, RUPTURE, TYPEA, CHEMIN_VERS_LIMAGE "
-                     "FROM SNACK WHERE TYPEA = $1 AND EN_VENTE = $2";
+                     "FROM SNACK WHERE TYPEA = $1 AND EN_VENTE = $2 ORDER BY NOM_SNACK";
 
         // Exécution de la requête avec les paramètres
         result res = txn.exec_params(sql, categorie, 1);

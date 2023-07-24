@@ -68,9 +68,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     sizer_comende->Add(membres, 0, wxALL | wxEXPAND, 0);
 
     
-    sizer_comende->Add(commande, 0, wxALL | wxEXPAND, 0);
+    sizer_comende->Add(commande, 1, wxALL | wxEXPAND, 0);
 
-    sizer_comende->Add(statistiques, 0, wxALL | wxEXPAND, 0);
+    sizer_comende->Add(statistiques, 1, wxALL | wxEXPAND, 0);
     
     //separations
     sizer_init->Add(ligneHoriz, 0, wxALL | wxEXPAND, 0);
@@ -124,6 +124,7 @@ void MyFrame::OnAdmin()
         membres->MoodAdmin();
         commande->MoodAdmin();
         membres->ModeCommandeAdmin();
+        statistiques->MoodAdmin();
     }
     code_is.Destroy();
 }
@@ -138,6 +139,7 @@ void MyFrame::OnUtilisateur()
     membres->MoodUtilisateur();
     membres->ModeCommandeUse();
     membres->JustOnePersonne();
+    statistiques->MoodUtilisateur();
 }
 
 void MyFrame::DesactiveUtilisateur(){

@@ -45,8 +45,10 @@ void Membre::InitPersonnes(){
 }
 void Membre::NewMembre(wxCommandEvent& event)
 {
-    wxTextEntryDialog nom_is(this->panel_parent, wxT("Le Nom du nouvaus menbre"), wxT("Ajouter un membre"));
-    wxTextEntryDialog prenom_is(this->panel_parent, wxT("Le Prenom du nouvaus menbre"), wxT("Ajouter un membre"));
+    wxTextEntryDialog nom_is(this->panel_parent, wxT("Le Nom du nouvaus menbre (sans acens)"), wxT("Ajouter un membre"));
+    wxTextEntryDialog prenom_is(this->panel_parent, wxT("Le Prenom du nouvaus menbre (sans acens)"), wxT("Ajouter un membre"));
+    nom_is.SetTextValidator(wxFILTER_ALPHA);
+    prenom_is.SetTextValidator(wxFILTER_ALPHA);
     string nom;
     string prenom;
     if (nom_is.ShowModal() == wxID_OK && prenom_is.ShowModal() == wxID_OK)

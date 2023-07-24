@@ -26,6 +26,7 @@ Historique::Historique(wxScrolledWindow* dialog_parent, wxString date_et_heur, J
 }
 
 void Historique::EventRetireHistorique(wxCommandEvent& event){
+    deletCommande(date_heur);
     journalier->SupprimerHistorique(this);
 
 }
@@ -39,3 +40,6 @@ void Historique::EventInfoHistorique(wxCommandEvent& event){
 	infoDialog->Destroy();
 }
 
+void Historique::MoodUtilisateur(){
+    btn_sup_historique->Enable(false);
+}

@@ -41,6 +41,7 @@ private:
 
     wxButton* btn_anulation_commande;
     wxButton* btn_validation_commande;
+    wxButton* btn_sup_presedante_commande;
 
 
     wxBoxSizer* sizer_commandes;
@@ -65,6 +66,17 @@ private:
     void AjouterVente();
     void EventAnulationCommande(wxCommandEvent& event);
     void EventValidationCommande(wxCommandEvent& event);
+    void EventSuprimeCommande(wxCommandEvent& event);
+};
+
+class CommandeSup : public wxDialog
+{
+public:
+    CommandeSup(wxPanel*, string);
+private:
+    wxString description;
+    wxStaticText* text_description;
+    wxBoxSizer* sizer_commande;
 };
 
 #endif 

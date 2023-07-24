@@ -49,11 +49,14 @@ Commande::Commande(wxPanel* panel_parent, Membre* membre) : wxBoxSizer(wxHORIZON
 
     btn_anulation_commande = new wxButton(panel_parent, -1, "anuler");
     btn_validation_commande = new wxButton(panel_parent, -1, "valider");
+    btn_sup_presedante_commande = new wxButton(panel_parent, -1, "suprime commande presedante");
 
     sizer_anuler_valider->Add(btn_anulation_commande, 0, wxALL | wxEXPAND, 0);
     sizer_anuler_valider->Add(btn_validation_commande, 0, wxALL | wxEXPAND, 0);
+   
 
     sizer_valid_info->Add(sizer_anuler_valider, 0, wxALL | wxEXPAND, 0);
+    sizer_valid_info->Add(btn_sup_presedante_commande, 0, wxALL | wxEXPAND, 0);
 
     scrole_commandes->SetSizer(sizer_commandes);
     static_sizer_commandes->Add(scrole_commandes, 1, wxALL | wxEXPAND, 0);
@@ -63,6 +66,7 @@ Commande::Commande(wxPanel* panel_parent, Membre* membre) : wxBoxSizer(wxHORIZON
     monnaie->Bind(wxEVT_SPINCTRLDOUBLE, &Commande::EventMonnaie, this);
     btn_anulation_commande->Bind(wxEVT_BUTTON, &Commande::EventAnulationCommande, this);
     btn_validation_commande->Bind(wxEVT_BUTTON, &Commande::EventValidationCommande, this);
+    btn_sup_presedante_commande->Bind(wxEVT_BUTTON, &Commande::EventSuprimeCommande, this);
 }
 
 void Commande::NewCommande(Article* article)
@@ -213,6 +217,7 @@ void Commande::DestroyProduit(Produit* produit)
 void Commande::MoodUtilisateur(){
     btn_anulation_commande->Enable(true);
     btn_validation_commande->Enable(true);
+    btn_sup_presedante_commande->Enable(true);
 }
 
 void Commande::MoodAdmin(){
@@ -222,6 +227,8 @@ void Commande::MoodAdmin(){
     ReffrechTotal();
     btn_anulation_commande->Enable(false);
     btn_validation_commande->Enable(false);
+    btn_sup_presedante_commande->Enable(false);
+    
 }
 
 void Commande::AjouterVente() {
@@ -238,11 +245,11 @@ void Commande::AjouterVente() {
         string dateVente = res[0][0].as<string>();
 
         // Insertion des articles vendus dans la table CONTENU_VENTE
-        string insertContenuVente = "INSERT INTO CONTENU_VENTE (NOM_SNACK, DATE_ET_HEURE, OCCURRENCE) VALUES ($1, $2, $3)";
+        string insertContenuVente = "INSERT INTO CONTENU_VENTE (NOM_SNACK, DATE_ET_HEURE, OCCURRENCE, PRIX, PRIX_ACHAT) VALUES ($1, $2, $3, $4, $5)";
 
         for (auto article = commandes.begin(); article != commandes.end(); ++article){
 
-            txn.exec_params(insertContenuVente, article->first->GetNom(), dateVente, article->second->GetNbProduit());
+            txn.exec_params(insertContenuVente, article->first->GetNom(), dateVente, article->second->GetNbProduit(), article->first->GetPrix(), article->first->GetPrixAchat());
         }
 
         // Insertion des vendeurs dans la table VENDU_PAR
@@ -256,4 +263,37 @@ void Commande::AjouterVente() {
     } catch (const exception& e) {
         cerr << "Une erreur s'est produite lors de l'ajout de la vente : " << e.what() << std::endl;
     }
+}
+
+void Commande::EventSuprimeCommande(wxCommandEvent& event)
+{
+    string date_heur = RecentCommande();
+    CommandeSup* cs = new CommandeSup(panel_parent, date_heur);
+
+    if(cs->ShowModal() == wxID_OK){
+        deletCommande(date_heur);
+    }
+}
+
+CommandeSup::CommandeSup(wxPanel* panel_parent, string date_heur) : wxDialog(panel_parent, -1, wxString("La commande " + date_heur +" va etre suprimer"), wxDefaultPosition, wxSize(400,500))
+{
+    sizer_commande = new wxBoxSizer(wxVERTICAL);
+    description = descriptionCommande(date_heur);
+
+    text_description = new wxStaticText(this, -1, description);
+    sizer_commande->Add(text_description, 1, wxALL | wxEXPAND, 0);
+
+    wxStdDialogButtonSizer* ButtonSizer = new wxStdDialogButtonSizer;
+    
+    wxButton* BtnOk = new wxButton(this, wxID_OK, _("&OK"), wxDefaultPosition,
+    wxDefaultSize, 0);
+    BtnOk->SetDefault();
+    ButtonSizer->AddButton(BtnOk);
+    wxButton* BtnCancel = new wxButton(this, wxID_CANCEL, _("&Cancel"),
+    wxDefaultPosition, wxDefaultSize, 0);
+    ButtonSizer->AddButton(BtnCancel);
+    
+    ButtonSizer->Realize();
+    sizer_commande->Add(ButtonSizer, 0, wxALIGN_RIGHT|wxALL, 5);
+    this->SetSizer(sizer_commande);
 }

@@ -59,12 +59,44 @@ bool nomInactif(const string& nom, const string& prenom);
 void ActiverPersonne(const string& nom, const string& prenom);
 vector<personne> getPersonnes();
 
-vector<string> listCommandeJour(string date);
-vector<string> listCommandeJourSnack(string date, string snack);
-vector<string> listCommandeJourPersone(string date, string persone);
-vector<string> listCommandeJourSnackPersone(string date,string snack, string persone);
+vector<string> listCommandeJour(string date, string date_fin);
+vector<string> listCommandeJourSnack(string date, string date_fin, string snack);
+vector<string> listCommandeJourPersone(string date, string date_fin, string persone);
+vector<string> listCommandeJourSnackPersone(string date, string date_fin,string snack, string persone);
 
 wxString descriptionCommande(wxString date_et_heur);
+
+void deletCommande(wxString date_et_heur);
+string RecentCommande();
+
+float commandePrix(string date_heur);
+float commandePrix(string date_heur);
+float commandePrix(string date_heur);
+
+float CommandePrixJourPersonneSnack(string date_heur_debut, string date_heur_fin, string snack, string personne);
+float CommandePrixJourPersonneSnackSpesific(string date_heur_debut, string date_heur_fin, string snack, string personne, int&);
+
+float CommandePrixJourPersonne(string date_heur_debut, string date_heur_fin, string personne);
+
+float CommandePrixJourSnack(string date_heur_debut, string date_heur_fin, string snack);
+float CommandePrixJourSnackSpesific(string date_heur_debut, string date_heur_fin, string snack, int&);
+
+float CommandePrixJourSnack(string date_heur_debut, string date_heur_fin, string snack);
+
+float CommandePrixJour(string date_heur_debut, string date_heur_fin);
+
+//--------------------------------------------------------------
+
+float CommandePrixAchatJourPersonneSnack(string date_heur_debut, string date_heur_fin, string snack, string personne);
+float CommandePrixAchatJourPersonneSnackSpesific(string date_heur_debut, string date_heur_fin, string snack, string personne);
+
+float CommandePrixAchatJourPersonne(string date_heur_debut, string date_heur_fin, string personne);
+
+float CommandePrixAchatJourSnack(string date_heur_debut, string date_heur_fin, string snack);
+float CommandePrixAchatJourSnackSpesific(string date_heur_debut, string date_heur_fin, string snack);
+
+
+float CommandePrixAchatJour(string date_heur_debut, string date_heur_fin);
 
 
 #endif

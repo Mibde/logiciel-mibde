@@ -37,7 +37,7 @@ void InfoArticle::InitInfoArticle(wxPanel* parent, const wxString nom, wxString 
     sizer_rupture->Add(spin_rupture, 1);
     sizer_caracteristique = new wxBoxSizer(wxVERTICAL);
 
-    const wxString caracteristique[] = {"Halal", "Hosher", "Recyclable", "Vegan", "Vegetarian"};
+    const wxString caracteristique[] = {"Halal", "Cacher", "Recyclable", "Vegan", "Vegetarien"};
     check_caracteristique = new wxCheckListBox(this, -1, wxDefaultPosition, wxDefaultSize, 5, caracteristique);
     for(int i = 0; i < 5; i++){
         check_caracteristique->Check(i, caracteristique_presedente[i]);
