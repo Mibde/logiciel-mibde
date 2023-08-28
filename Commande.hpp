@@ -42,6 +42,8 @@ private:
     wxButton* btn_anulation_commande;
     wxButton* btn_validation_commande;
     wxButton* btn_sup_presedante_commande;
+    wxButton* vendre_prix_coutent;
+    wxButton* vendre_a_perte;
 
 
     wxBoxSizer* sizer_commandes;
@@ -64,9 +66,16 @@ private:
     void Anulation();
     void Validation();
     void AjouterVente();
+    void ReffrechCommande();
+
+    void AjouterVenteCoutent();
+    void AjouterVentePerte();
+    
     void EventAnulationCommande(wxCommandEvent& event);
     void EventValidationCommande(wxCommandEvent& event);
     void EventSuprimeCommande(wxCommandEvent& event);
+    void CommandeCoutent(wxCommandEvent& event);
+    void CommandePerte(wxCommandEvent& event);
 };
 
 class CommandeSup : public wxDialog

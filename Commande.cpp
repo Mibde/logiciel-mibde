@@ -50,6 +50,8 @@ Commande::Commande(wxPanel* panel_parent, Membre* membre) : wxBoxSizer(wxHORIZON
     btn_anulation_commande = new wxButton(panel_parent, -1, "anuler");
     btn_validation_commande = new wxButton(panel_parent, -1, "valider");
     btn_sup_presedante_commande = new wxButton(panel_parent, -1, "suprime commande presedante");
+    vendre_prix_coutent = new wxButton(panel_parent, -1, "vendre a prix coutant");
+    vendre_a_perte = new wxButton(panel_parent, -1, "vendre a perte");
 
     sizer_anuler_valider->Add(btn_anulation_commande, 0, wxALL | wxEXPAND, 0);
     sizer_anuler_valider->Add(btn_validation_commande, 0, wxALL | wxEXPAND, 0);
@@ -57,6 +59,9 @@ Commande::Commande(wxPanel* panel_parent, Membre* membre) : wxBoxSizer(wxHORIZON
 
     sizer_valid_info->Add(sizer_anuler_valider, 0, wxALL | wxEXPAND, 0);
     sizer_valid_info->Add(btn_sup_presedante_commande, 0, wxALL | wxEXPAND, 0);
+    sizer_valid_info->Add(vendre_prix_coutent, 0, wxALL | wxEXPAND, 0);
+    sizer_valid_info->Add(vendre_a_perte, 0, wxALL | wxEXPAND, 0);
+
 
     scrole_commandes->SetSizer(sizer_commandes);
     static_sizer_commandes->Add(scrole_commandes, 1, wxALL | wxEXPAND, 0);
@@ -67,6 +72,10 @@ Commande::Commande(wxPanel* panel_parent, Membre* membre) : wxBoxSizer(wxHORIZON
     btn_anulation_commande->Bind(wxEVT_BUTTON, &Commande::EventAnulationCommande, this);
     btn_validation_commande->Bind(wxEVT_BUTTON, &Commande::EventValidationCommande, this);
     btn_sup_presedante_commande->Bind(wxEVT_BUTTON, &Commande::EventSuprimeCommande, this);
+    vendre_prix_coutent->Bind(wxEVT_BUTTON, &Commande::CommandeCoutent, this);
+    vendre_a_perte->Bind(wxEVT_BUTTON, &Commande::CommandePerte, this);
+
+    
 }
 
 void Commande::NewCommande(Article* article)
@@ -124,23 +133,35 @@ void Commande::ReffrechMonnaieARendre(){
 void Commande::EventMonnaie(wxCommandEvent& event){
     ReffrechMonnaieARendre();
 }
-void Commande::EventValidationCommande(wxCommandEvent& event){
-    AjouterVente();  
-    Validation();
+
+void Commande::ReffrechCommande(){
     ClearCommande();
     ReffrechMonnaieARendre();
     ReffrechTotal();
     monnaie->SetValue(0.0);
     ReffrechMonnaieARendre();
 }
+void Commande::CommandeCoutent(wxCommandEvent& event){
+    AjouterVenteCoutent();
+    Validation();
+    ReffrechCommande();
+}
+
+void Commande::CommandePerte(wxCommandEvent& event){
+    AjouterVentePerte();
+    Validation();
+    ReffrechCommande();
+
+}
+void Commande::EventValidationCommande(wxCommandEvent& event){
+    AjouterVente();  
+    Validation();
+    ReffrechCommande();
+}
 
 void Commande::EventAnulationCommande(wxCommandEvent& event){
     Anulation();
-    ClearCommande();
-    ReffrechMonnaieARendre();
-    ReffrechTotal();
-    monnaie->SetValue(0.0);
-    ReffrechMonnaieARendre();
+    ReffrechCommande();
 }
 
 void Commande::Validation(){
@@ -218,6 +239,8 @@ void Commande::MoodUtilisateur(){
     btn_anulation_commande->Enable(true);
     btn_validation_commande->Enable(true);
     btn_sup_presedante_commande->Enable(true);
+    vendre_prix_coutent->Enable(true);
+    vendre_a_perte->Enable(true);
 }
 
 void Commande::MoodAdmin(){
@@ -228,6 +251,8 @@ void Commande::MoodAdmin(){
     btn_anulation_commande->Enable(false);
     btn_validation_commande->Enable(false);
     btn_sup_presedante_commande->Enable(false);
+    vendre_prix_coutent->Enable(false);
+    vendre_a_perte->Enable(false);
     
 }
 
@@ -250,6 +275,74 @@ void Commande::AjouterVente() {
         for (auto article = commandes.begin(); article != commandes.end(); ++article){
 
             txn.exec_params(insertContenuVente, article->first->GetNom(), dateVente, article->second->GetNbProduit(), article->first->GetPrix(), article->first->GetPrixAchat());
+        }
+
+        // Insertion des vendeurs dans la table VENDU_PAR
+        string insertVenduPar = "INSERT INTO VENDU_PAR (DATE_ET_HEURE, NOM, PRENOM) VALUES ($1, $2, $3)";
+        for (const auto& vendeur : vendeurs) {
+            txn.exec_params(insertVenduPar, dateVente, vendeur.first, vendeur.second);
+        }
+
+        txn.commit();
+
+    } catch (const exception& e) {
+        cerr << "Une erreur s'est produite lors de l'ajout de la vente : " << e.what() << std::endl;
+    }
+}
+
+void Commande::AjouterVenteCoutent() {
+    try {
+        vector<pair<string, string>> vendeurs = membre->GetListPersonne();
+        work txn(C);
+
+        // Insertion de la vente dans la table HISTORIQUE_VENTE avec la date actuelle
+        string insertVente = "INSERT INTO HISTORIQUE_VENTE (DATE_ET_HEURE) VALUES (CURRENT_TIMESTAMP)";
+        txn.exec(insertVente);
+
+        // Récupération de la date et heure de la vente insérée
+        result res = txn.exec("SELECT DATE_ET_HEURE FROM HISTORIQUE_VENTE ORDER BY DATE_ET_HEURE DESC LIMIT 1");
+        string dateVente = res[0][0].as<string>();
+
+        // Insertion des articles vendus dans la table CONTENU_VENTE
+        string insertContenuVente = "INSERT INTO CONTENU_VENTE (NOM_SNACK, DATE_ET_HEURE, OCCURRENCE, PRIX, PRIX_ACHAT) VALUES ($1, $2, $3, $4, $5)";
+
+        for (auto article = commandes.begin(); article != commandes.end(); ++article){
+
+            txn.exec_params(insertContenuVente, article->first->GetNom(), dateVente, article->second->GetNbProduit(), article->first->GetPrixAchat(), article->first->GetPrixAchat());
+        }
+
+        // Insertion des vendeurs dans la table VENDU_PAR
+        string insertVenduPar = "INSERT INTO VENDU_PAR (DATE_ET_HEURE, NOM, PRENOM) VALUES ($1, $2, $3)";
+        for (const auto& vendeur : vendeurs) {
+            txn.exec_params(insertVenduPar, dateVente, vendeur.first, vendeur.second);
+        }
+
+        txn.commit();
+
+    } catch (const exception& e) {
+        cerr << "Une erreur s'est produite lors de l'ajout de la vente : " << e.what() << std::endl;
+    }
+}
+
+void Commande::AjouterVentePerte() {
+    try {
+        vector<pair<string, string>> vendeurs = membre->GetListPersonne();
+        work txn(C);
+
+        // Insertion de la vente dans la table HISTORIQUE_VENTE avec la date actuelle
+        string insertVente = "INSERT INTO HISTORIQUE_VENTE (DATE_ET_HEURE) VALUES (CURRENT_TIMESTAMP)";
+        txn.exec(insertVente);
+
+        // Récupération de la date et heure de la vente insérée
+        result res = txn.exec("SELECT DATE_ET_HEURE FROM HISTORIQUE_VENTE ORDER BY DATE_ET_HEURE DESC LIMIT 1");
+        string dateVente = res[0][0].as<string>();
+
+        // Insertion des articles vendus dans la table CONTENU_VENTE
+        string insertContenuVente = "INSERT INTO CONTENU_VENTE (NOM_SNACK, DATE_ET_HEURE, OCCURRENCE, PRIX, PRIX_ACHAT) VALUES ($1, $2, $3, $4, $5)";
+
+        for (auto article = commandes.begin(); article != commandes.end(); ++article){
+
+            txn.exec_params(insertContenuVente, article->first->GetNom(), dateVente, article->second->GetNbProduit(), 0.0f, article->first->GetPrixAchat());
         }
 
         // Insertion des vendeurs dans la table VENDU_PAR
