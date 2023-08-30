@@ -8,7 +8,7 @@ Produit::Produit(wxPanel* parent, Commande* commande, wxString nom) : wxPanel(pa
     afichage = wxString::Format("%s X%d",nom, nb_produit);
     text_produit = new wxStaticText(this, -1, afichage);
     
-    wxBitmap sup_bitmap("icon/moin.png", wxBITMAP_TYPE_PNG);
+    wxBitmap sup_bitmap("icon/moin.jpg", wxBITMAP_TYPE_JPEG);
 
     btn_sup_produit = new wxBitmapButton(this, -1, sup_bitmap);
     btn_sup_produit->SetMinSize(btn_sup_produit->GetSize());

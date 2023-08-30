@@ -360,11 +360,13 @@ void Commande::AjouterVentePerte() {
 
 void Commande::EventSuprimeCommande(wxCommandEvent& event)
 {
-    string date_heur = RecentCommande();
-    CommandeSup* cs = new CommandeSup(panel_parent, date_heur);
+    if(HistoriqueNotEmpty()){
+        string date_heur = RecentCommande();
+        CommandeSup* cs = new CommandeSup(panel_parent, date_heur);
 
-    if(cs->ShowModal() == wxID_OK){
-        deletCommande(date_heur);
+        if(cs->ShowModal() == wxID_OK){
+            deletCommande(date_heur);
+        }
     }
 }
 

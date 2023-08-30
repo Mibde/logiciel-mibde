@@ -5,7 +5,7 @@ Personne::Personne(wxPanel* parent, Membre* membres, const string& nom, const st
     
     testCheck = new wxCheckBox(this, -1, wxString(nom + " " + prenom));
     
-    wxBitmap sup_bitmap("icon/moin.png", wxBITMAP_TYPE_PNG);
+    wxBitmap sup_bitmap("icon/moin.jpg", wxBITMAP_TYPE_JPEG);
 
     btn_sup_personne = new wxBitmapButton(this, -1, sup_bitmap);
     btn_sup_personne->SetMinSize(btn_sup_personne->GetSize());

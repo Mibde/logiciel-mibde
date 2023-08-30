@@ -71,6 +71,8 @@ private:
 	void chargeIcon();
 	void AddIcon();
 	void RuptureIcone();
+	wxImage IconImage(const wxString& imagePath);
+	wxImage LoadImage(const wxString& imagePath);
 public:
 	void MoodAdmin();
 	void MoodUtilisateur();

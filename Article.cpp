@@ -58,7 +58,22 @@ void Article::AddIcon(){
 	if(caracteristique[4])
 		InitIcon("icon/vegetarian.png");
 }
+wxImage Article::LoadImage(const wxString& imagePath) {
+    // Vérifier si le format est pris en charge
+    wxImage image;
+    if (wxImage::CanRead(imagePath)) {
+        // Charger l'image dans l'objet wxImage
+        image.LoadFile(imagePath);
+    }
+    return image;
+}
 
+wxImage Article::IconImage(const wxString& imagePath) {
+    // Vérifier si le format est pris en charge
+    wxImage image = LoadImage(imagePath);
+    image.Rescale(29, 29);
+    return image;
+}
 void Article::InitImageArticle() {
 	wxInitAllImageHandlers();
 	sizer_article = new wxBoxSizer(wxHORIZONTAL);
@@ -69,9 +84,20 @@ void Article::InitImageArticle() {
 
 	//image du snack
 	panel_imag_article = new wxPanel(this, -1);
-	wxBitmap parametre_imag(chemins_ime, wxBITMAP_TYPE_PNG);
-	imagae_article = new wxStaticBitmap(panel_imag_article, wxID_ANY,
-		parametre_imag);
+
+	//icon rupture
+	rupture_panel = new wxPanel(this, -1);
+
+	wxImage image = LoadImage(chemins_ime);
+	if(image.IsOk()){
+		image.Rescale(80, 70);
+		imagae_article = new wxStaticBitmap(panel_imag_article, wxID_ANY, wxBitmap(image));
+	}else{
+		wxImage erreur("icon/absent.jpeg", wxBITMAP_TYPE_JPEG);
+		erreur.Rescale(80, 70);
+		wxBitmap bimap_imag(erreur);
+		imagae_article = new wxStaticBitmap(panel_imag_article, wxID_ANY, bimap_imag);
+	}
 	
 	//btn suprestion article
 	InitSupArticle();
@@ -94,7 +120,8 @@ void Article::InitImageArticle() {
 
 void Article::InitIcon(string chemin_icon){
 	panel_icon_article.push_back(new wxPanel(this, -1));
-	wxBitmap bitmap_icon(chemin_icon, wxBITMAP_TYPE_PNG);
+	wxImage imageIcon = IconImage(chemin_icon);
+	wxBitmap bitmap_icon(imageIcon);
 	wxStaticBitmap* tmp;
 	if(tmp = new wxStaticBitmap(panel_icon_article[panel_icon_article.size()-1], wxID_ANY,
 		bitmap_icon)){
@@ -105,9 +132,12 @@ void Article::InitIcon(string chemin_icon){
 	sizer_parame_icon->Add(panel_icon_article[panel_icon_article.size()-1], 0);
 }
 void Article::RuptureIcone(){
-	rupture_panel = new wxPanel(this, -1);
-	ruptrue_icon_rouge = new wxBitmap("icon/rouge.jpg", wxBITMAP_TYPE_JPEG_RESOURCE);
-	ruptrue_icon_vert = new wxBitmap("icon/vert.png", wxBITMAP_TYPE_PNG);
+	
+	wxImage image_rouge = IconImage("icon/rouge.jpg");
+	wxImage image_vert = IconImage("icon/vert.png");
+
+	ruptrue_icon_rouge = new wxBitmap(image_rouge);
+	ruptrue_icon_vert = new wxBitmap(image_vert);
 	if(is_rupture){
 		rupture_Bitmap = new wxStaticBitmap(rupture_panel, wxID_ANY, *ruptrue_icon_rouge);
 	}else{
@@ -115,20 +145,24 @@ void Article::RuptureIcone(){
 	}
 
 }
+
 void Article::InitSupArticle(){
-	wxBitmap sup_bitmap("icon/moin.png", wxBITMAP_TYPE_PNG);
+	wxImage imag = IconImage("icon/moin.jpg");
+	wxBitmap sup_bitmap(imag);
 
 	btn_sup_article = new wxBitmapButton(this, -1, sup_bitmap);
 }
 
 void Article::InitParame(){
-	wxBitmap parame("icon/parame.jpg", wxBITMAP_TYPE_JPEG_RESOURCE);
+	wxImage imag = IconImage("icon/parame.jpg");
+	wxBitmap parame(imag);
 
 	btn_parame = new wxBitmapButton(this, -1, parame);
 }
 
 void Article::InitInfo(){
-	wxBitmap info("icon/iterrogation.jpg", wxBITMAP_TYPE_JPEG_RESOURCE);
+	wxImage imag = IconImage("icon/iterrogation.jpg");
+	wxBitmap info(imag);
 
 	btn_info = new wxBitmapButton(this, -1, info);
 }
@@ -167,13 +201,23 @@ void Article::EventParame(wxCommandEvent& event){
 			prix_achat = dialo.GetPrixAchat();
 			if ((dialo.GetChemin() != ""))
             	chemins_ime = dialo.GetChemin();
-			wxBitmap bitmap_icon(chemins_ime, wxBITMAP_TYPE_PNG);
+
+			wxImage image = LoadImage(chemins_ime);
+			wxBitmap bimap_imag;
+			if(image.IsOk()){
+				image.Rescale(80, 70);
+				bimap_imag = wxBitmap(image);
+			}else{
+				wxImage erreur("icon/absent.jpeg", wxBITMAP_TYPE_JPEG);
+				erreur.Rescale(80, 70);
+				wxBitmap bimap_imag = wxBitmap(erreur);
+			}
 		
-			imagae_article->SetBitmap(bitmap_icon);
+			imagae_article->SetBitmap(bimap_imag);
 
 			prix_article->SetValue(prix);
 			article->SetValue(nb_article);
-			
+			ConfirmeVente();
 			chargeIcon();
 			deleteSnackPeutContenir(wxStringToString(nom));
 			addAttributesToSnack(wxStringToString(nom), caracteristique);

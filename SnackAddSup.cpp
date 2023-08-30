@@ -213,7 +213,7 @@ float CommandePrixAchatJour(string date_heur_debut, string date_heur_fin)
     return prix;
 }
 
-//----------------------------------------------------------------------------------------------------------------------------
+
 float CommandePrixJourPersonneSnack(string date_heur_debut, string date_heur_fin,string snack, string personne)
 {
     float prix = 0.0f;
@@ -387,6 +387,21 @@ string RecentCommande(){
     return dateVente;
 }
 
+bool HistoriqueNotEmpty() {
+    
+    try {
+        nontransaction transaction(C);
+        result result = transaction.exec("SELECT EXISTS (SELECT 1 FROM historique_vente LIMIT 1)");
+        
+        if (!result.empty() && result[0][0].as<bool>()) {
+            return true; // Table is not empty
+        } else {
+            return false; // Table is empty
+        }
+    } catch (const exception& e) {
+        return false;
+    }
+}
 
 void deletCommande(wxString date_et_heur)
 {   
@@ -394,26 +409,22 @@ void deletCommande(wxString date_et_heur)
     try {
 
         work txn(C);
-        cout << "-----------------------------------" << endl;
         // Construction de la requête SQL
         string sql = "DELETE FROM contenu_vente WHERE DATE_ET_HEURE = $1" ;
 
         // Exécution de la requête avec les paramètres
 
         txn.exec_params(sql, date_heur);
-        cout << "-----------------------------------" << endl;
         sql = "DELETE FROM vendu_par WHERE DATE_ET_HEURE = $1" ;
 
         // Exécution de la requête avec les paramètres
 
         txn.exec_params(sql, date_heur);
-        cout << "-----------------------------------" << endl;
         sql = "DELETE FROM historique_vente WHERE DATE_ET_HEURE = $1" ;
 
         // Exécution de la requête avec les paramètres
 
         txn.exec_params(sql, date_heur);
-        cout << "-----------------------------------" << endl;
         txn.commit();
         
     } catch (const exception& e) {

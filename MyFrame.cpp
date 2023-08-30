@@ -110,7 +110,7 @@ void MyFrame::OnExit()
 
 void MyFrame::OnAdmin()
 {
-    wxTextEntryDialog code_is(panelAffichage, wxT("Entre le code administrateur"), wxT("Administrateur"));
+    wxTextEntryDialog code_is(panelAffichage, wxT("Entre le code administrateur"), wxT("Administrateur"), "", wxTextEntryDialogStyle | wxTE_PASSWORD);
 
     wxString nom = "code";
 

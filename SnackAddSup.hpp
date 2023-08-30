@@ -8,7 +8,6 @@
 #include <vector>
 #include <map>
 #include <utility>
-#include <Python.h>
 #include "Article.hpp"
 #include "Produit.hpp"
 using namespace std;
@@ -66,6 +65,7 @@ vector<string> listCommandeJourSnackPersone(string date, string date_fin,string 
 
 wxString descriptionCommande(wxString date_et_heur);
 
+bool HistoriqueNotEmpty();
 void deletCommande(wxString date_et_heur);
 string RecentCommande();
 
