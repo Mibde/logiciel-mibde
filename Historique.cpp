@@ -9,7 +9,7 @@ Historique::Historique(wxScrolledWindow* dialog_parent, wxString date_et_heur, J
     static_date_heur = new wxStaticText(this, wxID_ANY, date_et_heur);
     static_date_heur->SetMinSize(wxSize(250, 0));
 
-    wxBitmap sup_bitmap("icon/moin.png", wxBITMAP_TYPE_PNG);
+    wxBitmap sup_bitmap("icon/moin.jpg", wxBITMAP_TYPE_JPEG);
     btn_sup_historique = new wxBitmapButton(this, -1, sup_bitmap);
 
     

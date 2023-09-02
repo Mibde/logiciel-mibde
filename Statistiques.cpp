@@ -79,10 +79,10 @@ void Statistiques::OnDateSelectedFin(wxDateEvent& event)
 {
     wxDateTime date = event.GetDate();
     wxDateSpan oneDay;
+    // Durée d'un jour
     oneDay.SetDays(1);
     date.Add(oneDay);
-    //wxDateSpan span(1); // Durée d'un jour
-    //date.Add(span);
+    
     str_fin = date.FormatISODate();
 }
 

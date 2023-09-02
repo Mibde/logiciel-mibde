@@ -2,9 +2,6 @@
 
 Journalier::Journalier(wxPanel* parent, wxString wx_date_debus, wxString wx_date_fin, string type_snack, string type_personne, bool mode_utilisateur) : wxDialog(parent, -1, wxString(wxStringToString(wx_date_debus) + " a " + wxStringToString(wx_date_fin)), wxDefaultPosition, wxSize(500, 500))
 {
-    //wxString titre = wxString::Format("%s à %s", wxStringToString(wx_date_debus), wxStringToString(wx_date_fin));
-    //SetTitle(titre);
-    //this->SetSize(wxSize(500, 500));
     historique_sizer = new wxBoxSizer(wxVERTICAL);
     journalier_sizer = new wxBoxSizer(wxVERTICAL);
 
@@ -45,7 +42,7 @@ Journalier::Journalier(wxPanel* parent, wxString wx_date_debus, wxString wx_date
         benefe = prix-prix_achat;
         benefe_spes = prix_spes-prix_achat_spes;
         wxString afichage_prix = wxString::Format("Total des commandes et de %5.2f\net a un prix d'achat de %5.2f et un benefice de %5.2f ", prix, prix_achat, benefe);
-        wxString afichage_prix_specific = wxString::Format("Total des %s et de %5.2f pour %d \navec un prix d'achat de %5.2f et un benefice de %5.2f ", wxString(type_snack), prix_spes, occurrence, prix_achat_spes, benefe_spes);//%s et de %5.2f pour %d avec un prix d'achat de %5.2f et un benéfice de %5.2f ", wxString(type_snack), prix_spes, occurrence, prix_achat_spes, benefe_spes);
+        wxString afichage_prix_specific = wxString::Format("Total des %s et de %5.2f pour %d \navec un prix d'achat de %5.2f et un benefice de %5.2f ", wxString(type_snack), prix_spes, occurrence, prix_achat_spes, benefe_spes);
 
         journalier_sizer->Add(new wxStaticText(this, -1, afichage_prix));
         journalier_sizer->Add(new wxStaticText(this, -1, afichage_prix_specific));
