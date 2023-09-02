@@ -47,7 +47,7 @@ void Categorie::InitArtilce(){
 }
 
 void Categorie::EventAjouteArticle(wxCommandEvent& event) {
-    //wxInitAllImageHandlers();
+
     wxTextEntryDialog name_is(panel_parent, wxT("Le nom de l'article (sans acens)"), wxT("Ajouter un article"));
     name_is.SetTextValidator(wxFILTER_ALPHA);
     string nom_snack;
@@ -65,7 +65,6 @@ void Categorie::EventAjouteArticle(wxCommandEvent& event) {
         int res;
         
         if(unique_ptr<Snack> s = exiteSnack(nom_snack)){
-            //cout << "la il y a le chemin : " << s->cheminVersImage << endl;
             descriptif = s->description;
             caracteristique = checkArticleComposition(nom_snack);
             rupture = s->rupture;

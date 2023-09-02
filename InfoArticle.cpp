@@ -72,16 +72,14 @@ void InfoArticle::InitInfoArticle(wxPanel* parent, const wxString nom, wxString 
     ButtonSizer->AddButton(BtnCancel);
     ButtonSizer->Realize();
     
-    //sizer_premier->Add(CreateStdDialogButtonSizer(wxOK | wxCANCEL), 0, wxEXPAND | wxALL, 5);
+
 
 
     this->SetSizer(sizer_premier);
     button_image->Bind(wxEVT_BUTTON, &InfoArticle::EventCheminImage, this);
-    //BtnCancel->Bind(wxEVT_BUTTON, &InfoArticle::DeleteInfo, this);
+
 }
-void InfoArticle::DeleteInfo(wxCommandEvent& event){
-    cout << "le suside et une solutions" << endl;
-}
+
 
 wxString InfoArticle::GetDescriptif(){
     return text_descriptif->GetValue();

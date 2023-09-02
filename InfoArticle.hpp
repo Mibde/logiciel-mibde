@@ -38,7 +38,7 @@ private:
     wxCheckListBox* check_caracteristique;
     wxTextCtrl* text_descriptif;
     void EventCheminImage(wxCommandEvent& event);
-    void DeleteInfo(wxCommandEvent& event);
+
     wxString CheminsDeFicher();
 public:
     wxString GetDescriptif();
