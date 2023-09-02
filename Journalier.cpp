@@ -19,19 +19,19 @@ Journalier::Journalier(wxPanel* parent, wxString wx_date_debus, wxString wx_date
     int occurrence =0;
     
 
-    if(type_snack == "Tout snacks" && type_personne == "Toute les personnes"){
+    if(type_snack == "Tout snacks" && type_personne == "Tout le monde"){
         list_commande = listCommandeJour(date_debus, date_fin);
 
         prix = CommandePrixJour(date_debus, date_fin);
         prix_achat = CommandePrixAchatJour(date_debus, date_fin);
         benefe = prix-prix_achat;
-        wxString afichage_prix = wxString::Format("Total des commande : %5.2f prix d'achat %5.2f et benefice %5.2f ", prix, prix_achat, benefe);
+        wxString afichage_prix = wxString::Format("Total des commandes : %5.2f prix d'achat %5.2f et benefice %5.2f ", prix, prix_achat, benefe);
 
         journalier_sizer->Add(new wxStaticText(this, -1, afichage_prix));
 
         
     }
-    else if(type_personne == "Toute les personnes"){
+    else if(type_personne == "Toute le monde"){
         list_commande = listCommandeJourSnack(date_debus, date_fin, type_snack);
 
         prix = CommandePrixJourSnack(date_debus, date_fin, type_snack);
@@ -44,7 +44,7 @@ Journalier::Journalier(wxPanel* parent, wxString wx_date_debus, wxString wx_date
         cout << prix_achat_spes << endl;
         benefe = prix-prix_achat;
         benefe_spes = prix_spes-prix_achat_spes;
-        wxString afichage_prix = wxString::Format("Total des commande et de %5.2f\net a un prix d'achat de %5.2f et un benefice de %5.2f ", prix, prix_achat, benefe);
+        wxString afichage_prix = wxString::Format("Total des commandes et de %5.2f\net a un prix d'achat de %5.2f et un benefice de %5.2f ", prix, prix_achat, benefe);
         wxString afichage_prix_specific = wxString::Format("Total des %s et de %5.2f pour %d \navec un prix d'achat de %5.2f et un benefice de %5.2f ", wxString(type_snack), prix_spes, occurrence, prix_achat_spes, benefe_spes);//%s et de %5.2f pour %d avec un prix d'achat de %5.2f et un benéfice de %5.2f ", wxString(type_snack), prix_spes, occurrence, prix_achat_spes, benefe_spes);
 
         journalier_sizer->Add(new wxStaticText(this, -1, afichage_prix));

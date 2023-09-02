@@ -12,10 +12,10 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     //Menu de l'aplications
     wxMenu *menuFile = new wxMenu;
-    menuFile->Append(ID_MOOD_ADMIN, "&Mode Admine\tCtrl-A", "Passer laplications en mode Administrateur.");
-    menuFile->Append(ID_MOOD_UTILISATEUR, "&Mode Utilisateur\tCtrl-U", "Passer laplications en mode Utilisateur.");
+    menuFile->Append(ID_MOOD_ADMIN, "&Mode Admine\tCtrl-A", "Passer l'application en mode Administrateur.");
+    menuFile->Append(ID_MOOD_UTILISATEUR, "&Mode Utilisateur\tCtrl-U", "Passer l'application en mode Utilisateur.");
     menuFile->AppendSeparator();
-    menuFile->Append(wxID_EXIT, "&Quitter\tCtrl-Q", "Quitte l'aplication.");
+    menuFile->Append(wxID_EXIT, "&Quitter\tCtrl-Q", "Quitte l'application.");
     wxMenuBar *menuBar = new wxMenuBar;
     menuBar->Append( menuFile, "&File" );
     SetMenuBar( menuBar );
@@ -110,7 +110,7 @@ void MyFrame::OnExit()
 
 void MyFrame::OnAdmin()
 {
-    wxTextEntryDialog code_is(panelAffichage, wxT("Entre le code administrateur"), wxT("Administrateur"), "", wxTextEntryDialogStyle | wxTE_PASSWORD);
+    wxTextEntryDialog code_is(panelAffichage, wxT("Entrez le code administrateur"), wxT("Administrateur"), "", wxTextEntryDialogStyle | wxTE_PASSWORD);
 
     wxString nom = "code";
 

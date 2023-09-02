@@ -10,7 +10,7 @@ Membre::Membre(wxPanel* panel_parent) : wxStaticBoxSizer(wxVERTICAL, panel_paren
     sizer_membres = new wxBoxSizer(wxVERTICAL);
 
     sizer_membres_button = new wxBoxSizer(wxHORIZONTAL);
-    ajoute_personne = new wxButton(panel_parent, -1, "ajoute");
+    ajoute_personne = new wxButton(panel_parent, -1, "Ajouter");
     sizer_membres_button->Add(ajoute_personne, 1);
 
     scrole_membres->SetSizer(sizer_membres);
@@ -45,8 +45,8 @@ void Membre::InitPersonnes(){
 }
 void Membre::NewMembre(wxCommandEvent& event)
 {
-    wxTextEntryDialog nom_is(this->panel_parent, wxT("Le Nom du nouvaus menbre (sans acens)"), wxT("Ajouter un membre"));
-    wxTextEntryDialog prenom_is(this->panel_parent, wxT("Le Prenom du nouvaus menbre (sans acens)"), wxT("Ajouter un membre"));
+    wxTextEntryDialog nom_is(this->panel_parent, wxT("Nom du nouvaus membre (sans accents)"), wxT("Ajouter un membre"));
+    wxTextEntryDialog prenom_is(this->panel_parent, wxT("Prenom du nouveau membre (sans accents)"), wxT("Ajouter un membre"));
     nom_is.SetTextValidator(wxFILTER_ALPHA);
     prenom_is.SetTextValidator(wxFILTER_ALPHA);
     string nom;
@@ -158,7 +158,7 @@ void Membre::ModeCommandeUse(){
 
 wxArrayString Membre::NomPersonnes(){
     wxArrayString nom_prenom;
-    nom_prenom.Add(wxString("Toute les personnes"));
+    nom_prenom.Add(wxString("Toutes les personnes"));
     for(Personne* p : membres){
         nom_prenom.Add(p->Afiche());
     }

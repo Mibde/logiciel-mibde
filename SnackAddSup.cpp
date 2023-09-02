@@ -29,7 +29,7 @@ float commandePrix(string date_heur)
 
 
     } catch (const exception& e) {
-        wxLogError("Une erreur s'est produite lors du clacule du prix personne 2 : '%s'", e.what());
+        wxLogError("Une erreur s'est produite lors du cacul du prix personne 2 : '%s'", e.what());
     }
     return prix;
 }
@@ -51,7 +51,7 @@ float commandePrixAchat(string date_heur)
 
 
     } catch (const exception& e) {
-        wxLogError("Une erreur s'est produite lors du clacule du prix personne 2 : '%s'", e.what());
+        wxLogError("Une erreur s'est produite lors du calcul du prix personne 2 : '%s'", e.what());
     }
     return prix;
 
@@ -82,7 +82,7 @@ float CommandePrixAchatJourPersonneSnack(string date_heur_debut, string date_heu
 
         
     } catch (const exception& e) {
-        wxLogError("Une erreur s'est produite lors du clacule du prix personne 2: '%s'", e.what());
+        wxLogError("Une erreur s'est produite lors du cacul du prix personne 2: '%s'", e.what());
     }
     return prix;
 }
@@ -110,7 +110,7 @@ float CommandePrixAchatJourPersonneSnackSpesific(string date_heur_debut, string 
 
         
     } catch (const exception& e) {
-        wxLogError("Une erreur s'est produite lors du clacule du prix personne : 4'%s'", e.what());
+        wxLogError("Une erreur s'est produite lors du calcul du prix personne : 4'%s'", e.what());
     }
     return prix;
 }
@@ -139,7 +139,7 @@ float CommandePrixAchatJourPersonne(string date_heur_debut, string date_heur_fin
 
         
     } catch (const exception& e) {
-        wxLogError("Une erreur s'est produite lors du clacule du prix personne : '%s'", e.what());
+        wxLogError("Une erreur s'est produite lors du calcul du prix personne : '%s'", e.what());
     }
     return prix;
 }
@@ -162,7 +162,7 @@ float CommandePrixAchatJourSnack(string date_heur_debut, string date_heur_fin, s
 
         
     } catch (const exception& e) {
-        wxLogError("Une erreur s'est produite lors du clacule du prix personne 2: '%s'", e.what());
+        wxLogError("Une erreur s'est produite lors du calcul du prix personne 2: '%s'", e.what());
     }
     return prix;
 }
@@ -185,7 +185,7 @@ float CommandePrixAchatJourSnackSpesific(string date_heur_debut, string date_heu
 
 
     } catch (const exception& e) {
-        wxLogError("Une erreur s'est produite lors du clacule du prix personne 1 : '%s'", e.what());
+        wxLogError("Une erreur s'est produite lors du calcul du prix personne 1 : '%s'", e.what());
     }
     return prix;
 }
@@ -208,7 +208,7 @@ float CommandePrixAchatJour(string date_heur_debut, string date_heur_fin)
 
 
     } catch (const exception& e) {
-        wxLogError("Une erreur s'est produite lors du clacule du prix personne 1 : '%s'", e.what());
+        wxLogError("Une erreur s'est produite lors du calcul du prix personne 1 : '%s'", e.what());
     }
     return prix;
 }
@@ -239,7 +239,7 @@ float CommandePrixJourPersonneSnack(string date_heur_debut, string date_heur_fin
 
         
     } catch (const exception& e) {
-        wxLogError("Une erreur s'est produite lors du clacule du prix personne 1: '%s'", e.what());
+        wxLogError("Une erreur s'est produite lors du calcul du prix personne 1: '%s'", e.what());
     }
     return prix;
 }
@@ -269,7 +269,7 @@ float CommandePrixJourPersonneSnackSpesific(string date_heur_debut, string date_
 
         
     } catch (const exception& e) {
-        wxLogError("Une erreur s'est produite lors du clacule du prix personne : 3'%s'", e.what());
+        wxLogError("Une erreur s'est produite lors du calcul du prix personne : 3'%s'", e.what());
     }
     return prix;
 }
@@ -298,7 +298,7 @@ float CommandePrixJourPersonne(string date_heur_debut, string date_heur_fin, str
 
         
     } catch (const exception& e) {
-        wxLogError("Une erreur s'est produite lors du clacule du prix personne : '%s'", e.what());
+        wxLogError("Une erreur s'est produite lors du calcul du prix personne : '%s'", e.what());
     }
     return prix;
 }
@@ -321,7 +321,7 @@ float CommandePrixJourSnack(string date_heur_debut, string date_heur_fin, string
 
         
     } catch (const exception& e) {
-        wxLogError("Une erreur s'est produite lors du clacule du prix personne 2: '%s'", e.what());
+        wxLogError("Une erreur s'est produite lors du calcul du prix personne 2: '%s'", e.what());
     }
     return prix;
 }
@@ -346,7 +346,7 @@ float CommandePrixJourSnackSpesific(string date_heur_debut, string date_heur_fin
 
 
     } catch (const exception& e) {
-        wxLogError("Une erreur s'est produite lors du clacule du prix personne 1 : '%s'", e.what());
+        wxLogError("Une erreur s'est produite lors du calcul du prix personne 1 : '%s'", e.what());
     }
     return prix;
 }
@@ -369,7 +369,7 @@ float CommandePrixJour(string date_heur_debut, string date_heur_fin)
 
 
     } catch (const exception& e) {
-        wxLogError("Une erreur s'est produite lors du clacule du prix personne 2 : '%s'", e.what());
+        wxLogError("Une erreur s'est produite lors du calcul du prix personne 2 : '%s'", e.what());
     }
     return prix;
 }
@@ -382,7 +382,7 @@ string RecentCommande(){
         result res = txn.exec("SELECT DATE_ET_HEURE FROM HISTORIQUE_VENTE ORDER BY DATE_ET_HEURE DESC LIMIT 1");
         dateVente = res[0][0].as<string>();
     } catch (const exception& e) {
-        wxLogError("Une erreur s'est produite lors la suprestion deletRecentCommande: '%s'", e.what());
+        wxLogError("Une erreur s'est produite lors la suppression deletRecentCommande: '%s'", e.what());
     }
     return dateVente;
 }
@@ -439,9 +439,9 @@ wxString descriptionCommande(wxString date_et_heur)
     ostringstream s;
 
     
-    s << "Le prix de la commande et de " << fixed << setprecision(2) << prix << "\n";
-    s << "Le prix d'achat de la commande et de " << fixed << setprecision(2) << prix_achat << "\n";
-    s << "Le benefice de la commande et de " << fixed << setprecision(2) << prix-prix_achat << "\n";
+    s << "Le prix de la commande est de " << fixed << setprecision(2) << prix << "\n";
+    s << "Le prix d'achat de la commande est de " << fixed << setprecision(2) << prix_achat << "\n";
+    s << "Le benefice de la commande est de " << fixed << setprecision(2) << prix-prix_achat << "\n";
     
     s << "La commande continent :\n";
 
@@ -476,7 +476,7 @@ wxString descriptionCommande(wxString date_et_heur)
             s << row["prenom"].as<string>() << "\n";
         }
     } catch (const exception& e) {
-        wxLogError("Une erreur s'est produite lors de la descriptions du snack : '%s'", e.what());
+        wxLogError("Une erreur s'est produite lors de la description du snack : '%s'", e.what());
     }
     return wxString(s.str());
 }
@@ -487,7 +487,7 @@ vector<string> listCommandeJour(string date_debu, string date_fin){
     try {
 
         nontransaction txn(C);
-        cout << "date_debu : " << date_debu <<" date_fin : " << date_fin << endl;
+        cout << "date_debut : " << date_debu <<" date_fin : " << date_fin << endl;
         // Construction de la requête SQL
         string sql = "SELECT DATE_ET_HEURE "
                      "FROM historique_vente WHERE DATE_ET_HEURE >= $1 AND DATE_ET_HEURE < $2" ;
@@ -697,7 +697,7 @@ void deleteSnack(const string& nomSnack){
         txn.commit();
         cout << nomSnack << "passe a -1" << endl;
     } catch (const exception& e) {
-        wxLogError("Une erreur s'est produite lors de la supresiont du snack : '%s' ", e.what());
+        wxLogError("Une erreur s'est produite lors de la suppression du snack : '%s' ", e.what());
     }
 }
 

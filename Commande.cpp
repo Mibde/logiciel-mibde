@@ -47,11 +47,11 @@ Commande::Commande(wxPanel* panel_parent, Membre* membre) : wxBoxSizer(wxHORIZON
     sizer_valid_info->Add(sizer_monnaie, 0, wxALL | wxEXPAND, 0);
     sizer_valid_info->Add(sizer_rendre, 0, wxALL | wxEXPAND, 0);
 
-    btn_anulation_commande = new wxButton(panel_parent, -1, "anuler");
-    btn_validation_commande = new wxButton(panel_parent, -1, "valider");
-    btn_sup_presedante_commande = new wxButton(panel_parent, -1, "suprime commande presedante");
-    vendre_prix_coutent = new wxButton(panel_parent, -1, "vendre a prix coutant");
-    vendre_a_perte = new wxButton(panel_parent, -1, "vendre a perte");
+    btn_anulation_commande = new wxButton(panel_parent, -1, "Annuler");
+    btn_validation_commande = new wxButton(panel_parent, -1, "Valider");
+    btn_sup_presedante_commande = new wxButton(panel_parent, -1, "Supprimer la commande precedante");
+    vendre_prix_coutent = new wxButton(panel_parent, -1, "Vendre a prix coutant");
+    vendre_a_perte = new wxButton(panel_parent, -1, "Vendre a perte");
 
     sizer_anuler_valider->Add(btn_anulation_commande, 0, wxALL | wxEXPAND, 0);
     sizer_anuler_valider->Add(btn_validation_commande, 0, wxALL | wxEXPAND, 0);
@@ -96,7 +96,7 @@ void Commande::NewCommande(Article* article)
         }
         else
         {
-            wxLogError("Une ereur et survenus au moment de l'ajous du produit");
+            wxLogError("Une erreur est survenue au moment de l'ajout du produit");
         }
     }
     else{

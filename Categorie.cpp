@@ -13,7 +13,7 @@ Categorie::Categorie(wxPanel* panel_parent, string nom, Commande* commande) : wx
     
     
 
-    ajoute_article = new wxButton(panel_parent, -1, "ajoute");
+    ajoute_article = new wxButton(panel_parent, -1, "Ajouter");
 
     
     
@@ -48,7 +48,7 @@ void Categorie::InitArtilce(){
 
 void Categorie::EventAjouteArticle(wxCommandEvent& event) {
     //wxInitAllImageHandlers();
-    wxTextEntryDialog name_is(panel_parent, wxT("Le nom de l'article (sans acens)"), wxT("Ajouter un article"));
+    wxTextEntryDialog name_is(panel_parent, wxT("Nom de l'article (sans accents)"), wxT("Ajouter un article"));
     name_is.SetTextValidator(wxFILTER_ALPHA);
     string nom_snack;
 

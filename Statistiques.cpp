@@ -3,7 +3,7 @@
 Statistiques::Statistiques(wxPanel* panel_parent, MyFrame* frame_parent, Membre* membre) : wxStaticBoxSizer(wxHORIZONTAL, panel_parent, "Statistiques"), frame_parent(frame_parent), membre(membre), panel_parent(panel_parent)
 {
     mode_utilisateur = false;
-    date_debus = new wxStaticText(panel_parent, -1, "Date de debus : ");
+    date_debus = new wxStaticText(panel_parent, -1, "Date de debut : ");
     date_fin = new wxStaticText(panel_parent, -1, "Date de fin : ");
 
     date_picker_debus = new wxDatePickerCtrl(panel_parent, wxID_ANY, wxDefaultDateTime, wxDefaultPosition, wxDefaultSize, wxDP_DEFAULT | wxDP_SHOWCENTURY);
@@ -23,7 +23,7 @@ Statistiques::Statistiques(wxPanel* panel_parent, MyFrame* frame_parent, Membre*
     selection_personne = new wxChoice(panel_parent, -1, wxDefaultPosition, wxDefaultSize, personne);
     selection_personne->SetSelection(0);
 
-    valide_state = new wxButton(panel_parent, -1, "Valide");
+    valide_state = new wxButton(panel_parent, -1, "Valider");
     valide_state->SetMaxSize(wxSize(100, 50));
 
 

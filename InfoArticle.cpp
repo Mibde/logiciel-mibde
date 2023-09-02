@@ -80,7 +80,7 @@ void InfoArticle::InitInfoArticle(wxPanel* parent, const wxString nom, wxString 
     //BtnCancel->Bind(wxEVT_BUTTON, &InfoArticle::DeleteInfo, this);
 }
 void InfoArticle::DeleteInfo(wxCommandEvent& event){
-    cout << "le suside et une solutions" << endl;
+    cout << "le susside est une solution" << endl;
 }
 
 wxString InfoArticle::GetDescriptif(){
