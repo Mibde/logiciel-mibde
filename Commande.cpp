@@ -136,10 +136,10 @@ void Commande::EventMonnaie(wxCommandEvent& event){
 
 void Commande::ReffrechCommande(){
     ClearCommande();
+    cout << "la" << endl;
     ReffrechMonnaieARendre();
     ReffrechTotal();
     monnaie->SetValue(0.0);
-    ReffrechMonnaieARendre();
 }
 void Commande::CommandeCoutent(wxCommandEvent& event){
     AjouterVenteCoutent();
@@ -159,9 +159,12 @@ void Commande::EventValidationCommande(wxCommandEvent& event){
     ReffrechCommande();
 }
 
-void Commande::EventAnulationCommande(wxCommandEvent& event){
+void Commande::AnulationCommande(){
     Anulation();
     ReffrechCommande();
+}
+void Commande::EventAnulationCommande(wxCommandEvent& event){
+    AnulationCommande();
 }
 
 void Commande::Validation(){
@@ -174,20 +177,17 @@ void Commande::Anulation(){
 }
 
 void Commande::ClearCommande(){
-    for (auto it = commandes.begin(); it != commandes.end(); ++it)
+    for (auto it = commandes.begin(); it != commandes.end(); it++)
     {
         // Suppression de l'élément du sizer
         sizer_commandes->Detach(it->second);
-            
-        // Suppression de l'élément de la map
-        Produit* tmp = it->second;
-        commandes.erase(it);
-            
-        // Destruction de l'objet produit
-        tmp->Destroy();
+        
+        
+        it->second->Destroy();
 
     }
-
+    // Suppression de l'élément de la map
+    commandes.clear();
     sizer_commandes->Layout();
 }
 
@@ -244,10 +244,8 @@ void Commande::MoodUtilisateur(){
 }
 
 void Commande::MoodAdmin(){
-    Anulation();
-    ClearCommande();
-    ReffrechMonnaieARendre();
-    ReffrechTotal();
+    AnulationCommande();
+    cout << "peuter la" << endl;
     btn_anulation_commande->Enable(false);
     btn_validation_commande->Enable(false);
     btn_sup_presedante_commande->Enable(false);

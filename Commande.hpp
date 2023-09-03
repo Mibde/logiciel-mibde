@@ -70,7 +70,7 @@ private:
 
     void AjouterVenteCoutent();
     void AjouterVentePerte();
-    
+    void AnulationCommande();
     void EventAnulationCommande(wxCommandEvent& event);
     void EventValidationCommande(wxCommandEvent& event);
     void EventSuprimeCommande(wxCommandEvent& event);
