@@ -1,19 +1,16 @@
 #include "MyFrame.hpp"
 
-
-
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     : wxFrame(NULL, wxID_ANY, title, pos, size) {
     
-    //mode d'axer
+    //mode d'access
     mood_utilisateur = true;
 
-    
 
-    //Menu de l'aplications
+    //Menu de l'applications
     wxMenu *menuFile = new wxMenu;
-    menuFile->Append(ID_MOOD_ADMIN, "&Mode Admine\tCtrl-A", "Passer l'application en mode Administrateur.");
-    menuFile->Append(ID_MOOD_UTILISATEUR, "&Mode Utilisateur\tCtrl-U", "Passer l'application en mode Utilisateur.");
+    menuFile->Append(ID_MOOD_ADMIN, "&Mode Admin\tCtrl-A", "Passe l'application en mode Administrateur.");
+    menuFile->Append(ID_MOOD_UTILISATEUR, "&Mode Utilisateur\tCtrl-U", "Passe l'application en mode Utilisateur.");
     menuFile->AppendSeparator();
     menuFile->Append(wxID_EXIT, "&Quitter\tCtrl-Q", "Quitte l'application.");
     wxMenuBar *menuBar = new wxMenuBar;
@@ -31,8 +28,6 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     //les commande des client
     
     membres = new Membre(panelAffichage);
-
-    
 
     commande = new Commande(panelAffichage, membres);
     membres->InitCommande(commande);

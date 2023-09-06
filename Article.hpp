@@ -14,8 +14,11 @@
 #include "InfoArticle.hpp"
 #include "Commande.hpp"
 #include "SnackAddSup.hpp"
+
 using namespace std;
+
 class Categorie;
+
 class Article : public wxPanel {
 private:
 	wxPanel* panel_parent;
@@ -73,6 +76,7 @@ private:
 	void RuptureIcone();
 	wxImage IconImage(const wxString& imagePath);
 	wxImage LoadImage(const wxString& imagePath);
+
 public:
 	void MoodAdmin();
 	void MoodUtilisateur();
@@ -87,9 +91,8 @@ public:
 	void EventVenteProduit(wxCommandEvent& event);
 	void EventModifiePrix(wxCommandEvent& event);
 	void EventModifieArticle(wxCommandEvent& event);
-	Article(wxPanel*, Categorie*, wxString, wxString, double, double, int, int, vector<bool>, wxString, Commande*);
-
 	
+	Article(wxPanel*, Categorie*, wxString, wxString, double, double, int, int, vector<bool>, wxString, Commande*);
 };
 
 #endif // ARTICLE_H_INCLUDED

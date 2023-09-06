@@ -1,15 +1,11 @@
 #include <pqxx/pqxx>
 #include "SnackAddSup.hpp"
 
-
-
+extern connection C("dbname = mibde user = postgres password = mibde hostaddr = 127.0.0.1 port = 5432");
 
 string wxStringToString(const wxString& wxStr) {
     return string(wxStr.ToStdString());
 }
-
-extern connection C("dbname = mibde user = postgres password = mibde \
-hostaddr = 127.0.0.1 port = 5432");
 
 float commandePrix(string date_heur)
 {

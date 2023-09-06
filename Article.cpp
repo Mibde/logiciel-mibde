@@ -10,7 +10,7 @@ Article::Article(wxPanel* panel_parent, Categorie* categorie, wxString nom, wxSt
 	this->caracteristique = caracteristique;
 	this->descriptif = descriptif;
 	chemins_ime = chemins_image;
-	is_rupture = nb_article<= rupture;
+	is_rupture = nb_article <= rupture;
 	InitImageArticle();
 	//apelle des widget
 	AddArticle();

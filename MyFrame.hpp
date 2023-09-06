@@ -1,5 +1,6 @@
 #pragma once
 #ifndef MYFRAME_H_INCLUDED
+
 #define MYFRAME_H_INCLUDED
 
 #include <wx/wx.h>
@@ -14,7 +15,7 @@
 #include <wx/wfstream.h>
 #include <wx/datstrm.h>
 #include <iostream>
-#include<iomanip>
+#include <iomanip>
 #include <fstream>
 #include "Commande.hpp"
 #include "SnackAddSup.hpp"
@@ -22,8 +23,10 @@
 #include "Membre.hpp"
 #include "Statistiques.hpp"
 #include "Article.hpp"
+
 #define ID_MOOD_ADMIN (wxID_HIGHEST + 1)
 #define ID_MOOD_UTILISATEUR (wxID_HIGHEST + 2)
+
 using namespace std;
 class Categorie;
 class Statistiques;

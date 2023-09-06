@@ -1,5 +1,7 @@
 #ifndef PRODUIT_H_INCLUDED
+
 #define PRODUIT_H_INCLUDED
+
 #include <wx/wx.h>
 #include <wx/checkbox.h>
 #include <string>
@@ -9,7 +11,9 @@
 #include "Commande.hpp"
 
 using namespace std;
+
 class Commande;
+
 class Produit : public wxPanel
 {
 private:

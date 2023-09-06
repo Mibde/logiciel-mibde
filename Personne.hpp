@@ -1,5 +1,7 @@
 #ifndef PERSONNE_H_INCLUDED
+
 #define PERSONNE_H_INCLUDED
+
 #include <wx/wx.h>
 #include <wx/checkbox.h>
 #include <string>
@@ -9,8 +11,11 @@
 #include <utility>
 #include "Membre.hpp"
 #include "SnackAddSup.hpp"
+
 using namespace std;
+
 class Membre;
+
 class Personne : public wxPanel
 {
 private:
@@ -20,6 +25,7 @@ private:
     wxCheckBox* testCheck;
     wxBitmapButton* btn_sup_personne;
     Membre* membre;
+
 public:
     Personne(wxPanel*, Membre* membres, const string&, const string&);
     void MoodAdmin();
@@ -32,11 +38,5 @@ public:
     
 
 };
-
-
-
-
-
-
 
 #endif 

@@ -7,16 +7,10 @@ Categorie::Categorie(wxPanel* panel_parent, string nom, Commande* commande) : wx
 
     sizer_categorie = new wxBoxSizer(wxVERTICAL);
 
-
     sizer_categorie_button = new wxBoxSizer(wxHORIZONTAL);
-    
-    
-    
 
     ajoute_article = new wxButton(panel_parent, -1, "Ajouter");
 
-    
-    
     sizer_categorie_button->Add(ajoute_article, 1);
 
     scrole_categorie->SetSizer(sizer_categorie);
