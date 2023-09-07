@@ -28,7 +28,7 @@ Journalier::Journalier(wxPanel* parent, wxString wx_date_debus, wxString wx_date
 
         
     }
-    else if(type_personne == "Toute le monde"){
+    else if(type_personne == "Tout le monde"){
         list_commande = listCommandeJourSnack(date_debus, date_fin, type_snack);
 
         prix = CommandePrixJourSnack(date_debus, date_fin, type_snack);

@@ -158,7 +158,7 @@ void Membre::ModeCommandeUse(){
 
 wxArrayString Membre::NomPersonnes(){
     wxArrayString nom_prenom;
-    nom_prenom.Add(wxString("Toutes les personnes"));
+    nom_prenom.Add(wxString("Tout le monde"));
     for(Personne* p : membres){
         nom_prenom.Add(p->Afiche());
     }
