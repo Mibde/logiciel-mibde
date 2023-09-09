@@ -129,7 +129,7 @@ void InfoArticle::EventCheminImage(wxCommandEvent& event){
 }
 
 wxString InfoArticle::CheminsDeFicher() {
-    wxFileDialog openFileDialog(this, _("Open PNG file"), "", "", "PNG files (*.png)|*.png", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+    wxFileDialog openFileDialog(this, _("Ouvrir une image"), "", "", "Tous les fichiers (*.*)|*.*|Images PNG (*.png)|*.png|Images JPG (*.jpg;*.jpeg)|*.jpg;*.jpeg", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
     if (openFileDialog.ShowModal() == wxID_CANCEL)
         return "";     // the user changed idea...
 
